@@ -1,1 +1,1 @@
-# Bangla-Erroneous-Text-Detection-2
+# Bangla-Erroneous-Text-Detection

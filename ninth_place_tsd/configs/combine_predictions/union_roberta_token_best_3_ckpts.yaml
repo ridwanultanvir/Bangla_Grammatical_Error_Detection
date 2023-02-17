@@ -1,0 +1,13 @@
+type: intersection
+# type: union
+base_dir: ""
+files:
+  # - "../data/pred/spans_pred_bn_large.txt"
+  # - "../data/pred/spans_pred_xlm_base.txt"
+  # - "../data/pred/spans-pred_test_bn_base.txt"
+  # - "../data/pred/spans_pred_debertav3_large.txt"
+  - "../data/pred/spans_pred_bn3500.txt"
+  - "../data/pred/spans_pred_bnlarge_fullmodel1.txt"
+
+# path: "../data/pred/spans_pred_bnl_xlmb_bnb_dv3l_int.txt"
+path: "../data/pred/spans_pred_bn3500_bnlargefull1_int.txt"
