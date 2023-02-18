@@ -1,6 +1,6 @@
 model_name: autotoken
 pretrained_args:
-  pretrained_model_name_or_path: xlm-roberta-large
+  # pretrained_model_name_or_path: xlm-roberta-large
   # pretrained_model_name_or_path: bert-base-multilingual-uncased
   # pretrained_model_name_or_path: bigscience/bloom-560m
   # pretrained_model_name_or_path: csebuetnlp/banglishbert
@@ -9,21 +9,23 @@ pretrained_args:
   # pretrained_model_name_or_path:  xlm-roberta-base
   # pretrained_model_name_or_path: microsoft/deberta-v3-large
   # pretrained_model_name_or_path: microsoft/deberta-v3-base
-  # pretrained_model_name_or_path: csebuetnlp/banglabert
+  pretrained_model_name_or_path: csebuetnlp/banglabert
   # pretrained_model_name_or_path: sagorsarker/bangla-bert-base
 
   # pretrained_model_name_or_path: sberbank-ai/mGPT
   num_labels: 3
 
+model_id: banglabert
 # model_id: bert_large_25ep
-model_id: xlm_roberta_large
+# model_id: xlm_roberta_large
 # model_id: bert-base-multilingual-uncased
 # model_id: bloom-560m
 # model_id: banglishbert
 # model_id: mGPT
 
-results_dir: ./results/fixed/bert_token/${model_id}
-eval_log_save: 500 # 500 
+results_dir: ./results/fixed/bert_token_3cls/${model_id}
+# eval_log_save: 10
+eval_log_save: 500
 
 args:
   output_dir: ${results_dir}/ckpts/

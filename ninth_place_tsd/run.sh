@@ -8,12 +8,11 @@ CUDA_VISIBLE_DEVICES=1 python -u train.py \
 
 CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token/eval.yaml
 
-# bert_token
-CUDA_VISIBLE_DEVICES=1 python -u train.py \
-  --train ./configs/bert_token_3cls/train.yaml --data ./configs/bert_token_3cls/dataset.yaml 
-  # > out.log
+# bert_token for 3 classes
+CUDA_VISIBLE_DEVICES=0 python -u train.py \
+  --train ./configs/bert_token_3cls/train.yaml --data ./configs/bert_token_3cls/dataset.yaml  > out.log
 
-CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token/eval.yaml
+CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token_3cls/eval.yaml
 
 
 # bert_spans

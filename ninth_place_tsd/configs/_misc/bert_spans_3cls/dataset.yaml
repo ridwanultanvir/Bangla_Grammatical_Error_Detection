@@ -15,6 +15,7 @@ model_checkpoint_name: csebuetnlp/banglabert
 # model_checkpoint_name: sberbank-ai/mGPT
 train_files:
   train: ./data/vasha23_3cls/train_3cls.csv # ./data/tsd_train.csv
+  # train: ./data/vasha23_3cls/train_3cls_small.csv # ./data/tsd_train.csv
   validation: ./data/vasha23_3cls/test_3cls.csv # ./data/tsd_trial.csv
 
   # train: ./data/vasha23_fullfold1/train.csv # ./data/tsd_train.csv

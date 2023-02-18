@@ -22,7 +22,7 @@ pretrained_args:
 # model_id: banglabert_large
 model_id: banglabert
 
-results_dir: ./results/fixed/bert_spans/${model_id}
+results_dir: ./results/fixed/bert_spans_3cls/${model_id}
 eval_log_save: 500 # 500 
 
 args:

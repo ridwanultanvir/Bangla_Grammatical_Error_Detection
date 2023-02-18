@@ -36,6 +36,7 @@ from src.utils.mapper import configmapper
 
 import os
 import gc
+import ipdb
 
 untokenized_train_dataset_cache = None
 # TODO: do for three classes
@@ -50,21 +51,32 @@ def compute_metrics_token(p):
 
     offset_wise_scores = []
     # print(len(predictions))
+    # os.system('spd-say "Tracing begins"'); ipdb.set_trace()
+    '''
+    [i for i, pred in enumerate(predictions) if 2 in pred]
+    '''
+    
     for i, prediction in enumerate(predictions):
         ## Batch Wise
         # print(len(prediction))
+        # print("Prediction: ", prediction); exit()
         ground_spans = eval(validation_spans[i])
         predicted_spans = []
+        # ipdb.set_trace()
         for j, tokenwise_prediction in enumerate(
             prediction[: len(validation_offsets_mapping[i])]
         ):
-            if tokenwise_prediction == 1:
+            # pdb.set_trace()
+            # if tokenwise_prediction == 1:
+            # if tokenwise_prediction == in [1, 2]:
+            if tokenwise_prediction in range(1, train_config.pretrained_args.num_labels):
                 predicted_spans += list(
                     range(
                         validation_offsets_mapping[i][j][0],
                         validation_offsets_mapping[i][j][1],
                     )
                 )
+            
         offset_wise_scores.append(f1(predicted_spans, ground_spans))
     results_offset = np.mean(offset_wise_scores)
 
@@ -77,9 +89,13 @@ def compute_metrics_token(p):
         for pred, label in zip(predictions, labels)
     ]
 
+    
     results = np.mean(
         [
-            f1_score(true_label, true_preds)
+            f1_score(true_label, true_preds) if train_config.pretrained_args.num_labels == 2 
+                # else f1_score(true_label, true_preds, average="macro")
+                else f1_score(true_label, true_preds, average="weighted")
+
             for true_label, true_preds in zip(true_labels, true_predictions)
         ]
     )
@@ -177,7 +193,34 @@ if len(checkpoints) != 0:
 # exit()
 # global untokenized_train_dataset_cache
 untokenized_train_dataset_cache = untokenized_train_dataset
+# Find class weights for the dataset
 
+
+class CustomTrainer(Trainer):
+    # Pass all to super
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        loss_weights = [1.0]
+        error_weight = 10.0 # not working well
+        for i in range(1, self.model.config.num_labels):
+            loss_weights.append(error_weight)
+        self.loss_weights = torch.tensor(loss_weights).cuda()
+
+    def compute_loss(self, model, inputs, return_outputs=False):
+        # https://huggingface.co/docs/transformers/main_classes/trainer
+        labels = inputs.get("labels")
+        # forward pass
+        outputs = model(**inputs)
+        logits = outputs.get("logits")
+        # compute custom loss (suppose one has 3 labels with different weights)
+
+        # loss_fct = nn.CrossEntropyLoss(weight=torch.tensor([1.0, 10.0, 10.0]))
+        loss_fct = nn.CrossEntropyLoss(weight=self.loss_weights)
+        loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+        return (loss, outputs) if return_outputs else loss
+
+
+# trainer = CustomTrainer(
 trainer = Trainer(
     model=model,
     args=args,

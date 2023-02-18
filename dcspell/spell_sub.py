@@ -12,7 +12,12 @@ from collections import defaultdict
 # Read bad words csv pandas
 import pandas as pd
 bad_words = pd.read_csv("data/bad_words.csv")
-trainfile = r"../data/submissions/test_results_bn3500_bnlargefull1_int.csv"
+# trainfile = r"../data/submissions/test_results_bn3500_bnlargefull1_int.csv"
+trainfile = r"../data/three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-2000.csv"
+from pathlib import Path
+pred_file_p = Path(trainfile)
+out_file = pred_file_p.parent/(pred_file_p.stem + '_spell.csv')
+
 col = "Expected"
 train = pd.read_csv(trainfile, encoding='utf-8')
 bad_words = bad_words.values.flatten().tolist()
@@ -67,7 +72,8 @@ for idx, sentence in tqdm(enumerate(train[col].tolist()), total=len(train)):
 
 # Save output to Expected column
 train["Expected"] = outputs
-train.to_csv("submissions/test_results_bn3500_bnlargefull1_int_spell.csv", index=False)
+# train.to_csv("submissions/test_results_bn3500_bnlargefull1_int_spell.csv", index=False)
+train.to_csv(out_file, index=False)
 
 
 
