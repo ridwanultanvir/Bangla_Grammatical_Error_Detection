@@ -1,0 +1,31 @@
+model_name: bert_crf_3cls_token
+pretrained_args:
+  pretrained_model_name_or_path: csebuetnlp/banglabert
+  # pretrained_model_name_or_path: csebuetnlp/banglabert_large
+  # pretrained_model_name_or_path:  xlm-roberta-base
+  # pretrained_model_name_or_path: microsoft/deberta-v3-large
+  # csebuetnlp/banglat5 # csebuetnlp/banglabert_large # bert-large-uncased
+  num_labels: 4
+  lstm_hidden_size: 128
+  lstm_layers: 1
+
+model_id: banglabert
+# model_id: banglabert_large
+results_dir: ./results/fixed/${model_name}/${model_id}
+
+args:
+  output_dir: ${results_dir}/ckpts/
+  evaluation_strategy: steps
+  eval_steps: 500
+  logging_steps: 500
+  logging_first_step: true
+  logging_dir: ${results_dir}/logs/
+  learning_rate: 2e-5
+  save_steps: 500
+  per_device_train_batch_size: 8 # 4 # originally used 2
+  per_device_eval_batch_size: 8 # 4 # originally used 2
+  num_train_epochs: 10 # 5 # originally 5
+  weight_decay: 0.01
+  seed: 42
+
+save_model_path: ${results_dir}/final_model/

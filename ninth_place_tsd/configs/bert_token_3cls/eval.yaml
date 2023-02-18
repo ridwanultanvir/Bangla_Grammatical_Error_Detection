@@ -18,7 +18,7 @@ dataset:
   # model_checkpoint_name: ${results_dir}/final_model
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-15000
 
-  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-2000
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
   # {'eval_loss': 0.20323185622692108, 'eval_Token-Wise F1': 0.9362618195686405, 'eval_Offset-Wise F1': 0.7452573315843102, 'eval_runtime': 39.2, 'eval_samples_per_second': 47.883, 'eval_steps_per_second': 5.995, 'epoch': 2.13}
 
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
@@ -38,6 +38,6 @@ dataset:
     return_offsets_mapping: true
 pretrained_args:
   pretrained_model_name_or_path: ${dataset.model_checkpoint_name}
-with_ground: false # true
-# with_ground: true
+# with_ground: false # true
+with_ground: true
 save_dir: ${results_dir}/preds/

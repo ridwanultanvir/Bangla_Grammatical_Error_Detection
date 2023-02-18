@@ -1,0 +1,8 @@
+Model Name: checkpoint-2000, Dataset: train
+0.6451900745327759 0.8217900905700586
+Model Name: checkpoint-2000, Dataset: train
+0.6451900745327759 0.8217900905700586
+Model Name: checkpoint-2000, Dataset: train
+Model Name: checkpoint-2500, Dataset: train
+Model Name: checkpoint-2500, Dataset: train
+0.6545181883895104 0.8034096963239211
