@@ -2,6 +2,7 @@ from src.utils.mapper import configmapper
 from transformers import AutoTokenizer
 from datasets import load_dataset
 
+# import pdb
 
 @configmapper.map("datasets", "toxic_spans_tokens")
 class ToxicSpansTokenDataset:
@@ -32,7 +33,9 @@ class ToxicSpansTokenDataset:
         # tokenized_inputs["text"] = examples["text"]
         example_spans = []
         labels = []
+    
         offsets_mapping = tokenized_inputs["offset_mapping"]
+        # pdb.set_trace()
         for i, offset_mapping in enumerate(offsets_mapping):
             labels.append([])
 
@@ -53,7 +56,7 @@ class ToxicSpansTokenDataset:
             for j, offsets in enumerate(offset_mapping):
                 if tokenized_inputs["input_ids"][i][j] == self.tokenizer.cls_token_id:
                     labels[-1].append(cls_label)
-                elif offsets[0] == offsets[1] and offsets[0] == 0:
+                elif offsets[0] == offsets[1] and offsets[0] == 0: # All zero
                     labels[-1].append(-100)  ## SPECIAL TOKEN
                 else:
                     toxic_offsets = [x in spans for x in range(offsets[0], offsets[1])]

@@ -1,15 +1,18 @@
 import torch.nn as nn
 import torch
 from torch.nn import CrossEntropyLoss
-from transformers import BertPreTrainedModel, BertModel
+# from transformers import BertPreTrainedModel, BertModel
+from transformers import ElectraPreTrainedModel, ElectraModel
 from src.utils.mapper import configmapper
 
 
 @configmapper.map("models", "bert_token_spans")
-class BertModelForTokenAndSpans(BertPreTrainedModel):
+# class BertModelForTokenAndSpans(BertPreTrainedModel):
+class BertModelForTokenAndSpans(ElectraPreTrainedModel):
     def __init__(self, config, num_token_labels=2, num_qa_labels=2):
         super(BertModelForTokenAndSpans, self).__init__(config)
-        self.bert = BertModel(config)
+        # self.bert = BertModel(config)
+        self.bert = ElectraModel(config)
         self.num_token_labels = num_token_labels
         self.num_qa_labels = num_qa_labels
         # print("Number of Token Labels: ", num_token_labels); exit()

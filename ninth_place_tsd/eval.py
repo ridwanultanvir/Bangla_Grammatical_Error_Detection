@@ -224,6 +224,12 @@ if not os.path.exists(eval_config.save_dir):
 if "crf" in eval_config.model_name:
     if eval_config.with_ground:
         for key in tokenized_train_dataset.keys():
+            with open(
+                # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
+                os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
+            ) as f:
+                f.write(f"Model Name: {suffix}, Dataset: {key}\n")
+
             temp_dataset = tokenized_train_dataset[key]
             temp_dataset.set_format(
                 "torch",
@@ -264,18 +270,61 @@ if "crf" in eval_config.model_name:
             avg_f1_score = np.mean(
                 [f1(preds, ground) for preds, ground in zip(predicted_spans, spans)]
             )
+            edit_scores = []
+
             with open(
-                os.path.join(eval_config.save_dir, f"spans-pred-{key}.txt"), "w"
+                os.path.join(eval_config.save_dir, f"spans-pred-{key}_{suffix}.txt"), "w"
             ) as f:
-                for i, pred in tqdm(enumerate(predicted_spans)):
+                for i, pred in tqdm(enumerate(predicted_spans), total=len(predicted_spans)):
                     if i == len(preds) - 1:
                         f.write(f"{i}\t{str(pred)}")
                     else:
                         f.write(f"{i}\t{str(pred)}\n")
+
+                     # Edit distance
+                    ranges = get_ranges(pred)
+                    # print("ranges: ", ranges)
+                    # Get substring from span range
+                    sentence = untokenized_train_dataset[key]["sentence"][i]
+                    gt       = untokenized_train_dataset[key]["gt"][i]
+                    output = ""
+                    prev_s = 0
+                    for i, span in enumerate(ranges):
+                        if type(span) == int:
+                            s = span
+                            e = span + 1
+                        else:
+                            s = span.start
+                            e = span.stop + 1
+                        
+                        output += sentence[prev_s:s] + "$" + sentence[s:e] + "$"
+                        prev_s = e
+                        
+                    if prev_s < len(sentence):
+                        output += sentence[prev_s:]
+                    
+                    output = replace_fixed(output)
+                    output = replace_end(output)
+                    
+                    # print("output: ", output)
+                    # gt = untokenized_train_dataset[key]["gt"][i]
+                    # save output and gt to file
+                    # with open(os.path.join(eval_config.save_dir, f"output_{key}_{suffix}.txt"), "a+") as outfile:
+                    #     outfile.write(gt + "\n")
+                    #     # outfile.write(sentence + "\n")
+                    #     outfile.write(output + "\n")
+                    #     outfile.write("\n")
+
+                    edit = edit_distance(output, gt)
+                    edit_scores.append(edit)
+
             with open(
-                os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "w"
+                os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
             ) as f:
                 f.write(str(avg_f1_score))
+                f.write(" ")
+                f.write(str(np.mean(edit_scores)))
+                f.write("\n")
     else:
         for key in tokenized_test_dataset.keys():
             temp_dataset = tokenized_test_dataset[key]
@@ -290,7 +339,7 @@ if "crf" in eval_config.model_name:
             input_ids = temp_dataset["input_ids"]
             attention_mask = temp_dataset["attention_mask"]
             prediction_mask = temp_dataset["prediction_mask"]
-            for i in range(len(input_ids)):
+            for i in tqdm(range(len(input_ids))):
                 # print(prediction_mask[i])
                 predicts = model(
                     input_ids=input_ids[i].reshape(1, -1),
@@ -313,7 +362,7 @@ if "crf" in eval_config.model_name:
                             predicted_spans[-1] += list(range(offsets[0], offsets[1]))
                         k += 1
             with open(
-                os.path.join(eval_config.save_dir, f"spans-pred-{key}.txt"), "w"
+                os.path.join(eval_config.save_dir, f"spans-pred-{key}_{suffix}.txt"), "w"
             ) as f:
                 for i, pred in enumerate(predicted_spans):
                     if i == len(preds) - 1:

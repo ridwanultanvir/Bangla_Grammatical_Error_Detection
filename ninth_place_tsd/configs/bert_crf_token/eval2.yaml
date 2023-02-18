@@ -1,0 +1,30 @@
+model_name: bert_crf_token
+# model_id: banglabert_large
+model_id: banglabert
+results_dir: ./results/fixed/bert_crf_token/${model_id}
+dataset:
+  name: toxic_spans_crf_tokens
+  # model_checkpoint_name: ${results_dir}/final_model
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3000
+  train_files:
+    train: ./data/vasha23/train.csv #./data/tsd_train.csv
+    validation: ./data/vasha23/valid.csv # ./data/tsd_trial.csv
+    # original_test: ./data/tsd_test_spans.csv
+  eval_files:
+    test: ./data/vasha23/test_tsd.csv # ./data/tsd_test.csv
+  label_cls: true
+  cls_threshold: 0.3 # can be tuned
+  token_threshold: 0.0 # can be tuned
+  tokenizer_params:
+    truncation: true
+    max_length: 384 # originally we used 200
+    padding: max_length
+    return_offsets_mapping: true
+pretrained_args:
+  pretrained_model_name_or_path: ${dataset.model_checkpoint_name}
+  num_labels: 3
+  lstm_hidden_size: 128
+  lstm_layers: 1
+with_ground: false # true
+# with_ground: true
+save_dir: ${results_dir}/preds/

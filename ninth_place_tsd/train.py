@@ -38,6 +38,7 @@ import os
 import gc
 
 untokenized_train_dataset_cache = None
+# TODO: do for three classes
 def compute_metrics_token(p):
     # print(type(p))
     # print(dir(p))

@@ -92,6 +92,8 @@ class ToxicSpansCRFTokenDataset:
             examples["text"], **self.config.tokenizer_params
         )
         prediction_mask = np.zeros_like(np.array(tokenized_inputs["input_ids"]))
+        labels = np.zeros_like(np.array(tokenized_inputs["input_ids"]))
+        
         offsets_mapping = tokenized_inputs["offset_mapping"]
 
         for i, offset_mapping in enumerate(offsets_mapping):
@@ -104,5 +106,6 @@ class ToxicSpansCRFTokenDataset:
                 else:
                     prediction_mask[i][j] = 1
         
-        # tokenized_inputs["prediction_mask"] = prediction_mask
+        tokenized_inputs["prediction_mask"] = prediction_mask
+        tokenized_inputs["labels"] = labels
         return tokenized_inputs

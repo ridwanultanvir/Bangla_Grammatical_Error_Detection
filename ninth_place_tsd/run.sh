@@ -2,7 +2,16 @@
 ln -s /mnt/y/_data/vasha23/results/ ./results
 
 # bert_token
-CUDA_VISIBLE_DEVICES=0 python -u train.py --train ./configs/bert_token/train.yaml --data ./configs/bert_token/dataset.yaml > out.log
+CUDA_VISIBLE_DEVICES=1 python -u train.py \
+  --train ./configs/bert_token/train.yaml --data ./configs/bert_token/dataset.yaml 
+  # > out.log
+
+CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token/eval.yaml
+
+# bert_token
+CUDA_VISIBLE_DEVICES=1 python -u train.py \
+  --train ./configs/bert_token_3cls/train.yaml --data ./configs/bert_token_3cls/dataset.yaml 
+  # > out.log
 
 CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token/eval.yaml
 
@@ -13,7 +22,9 @@ CUDA_VISIBLE_DEVICES=0 python -u train.py --train ./configs/bert_spans/train.yam
 CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_spans/eval.yaml
 
 # bert_crf_token
-CUDA_VISIBLE_DEVICES=0 python -u train.py --train ./configs/bert_crf_token/train.yaml --data ./configs/bert_crf_token/dataset.yaml > out.log
+CUDA_VISIBLE_DEVICES=0 python -u train.py \
+  --train ./configs/bert_crf_token/train.yaml --data ./configs/bert_crf_token/dataset.yaml > out.log
+
 CUDA_VISIBLE_DEVICES=0 python -u eval.py --eval ./configs/bert_crf_token/eval.yaml
 
 # Combine preds

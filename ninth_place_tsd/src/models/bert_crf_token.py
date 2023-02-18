@@ -1,13 +1,17 @@
 import torch
-from transformers import BertForTokenClassification
+# from transformers import BertForTokenClassification
+from transformers import ElectraForTokenClassification
 from torchcrf import CRF
 from src.utils.mapper import configmapper
+# import pdb
 
 
 @configmapper.map("models", "bert_crf_token")
-class BertLSTMCRF(BertForTokenClassification):
+# class BertLSTMCRF(BertForTokenClassification):
+class BertLSTMCRF(ElectraForTokenClassification):
     def __init__(self, config, lstm_hidden_size, lstm_layers):
         super().__init__(config)
+        # ipdb.set_trace()
         self.lstm = torch.nn.LSTM(
             input_size=config.hidden_size,
             hidden_size=lstm_hidden_size,
@@ -29,8 +33,10 @@ class BertLSTMCRF(BertForTokenClassification):
         labels=None,
         prediction_mask=None,
     ):
+        # pdb.set_trace()
 
-        outputs = self.bert(
+        # outputs = self.bert(
+        outputs = self.electra(
             input_ids,
             attention_mask,
             token_type_ids,

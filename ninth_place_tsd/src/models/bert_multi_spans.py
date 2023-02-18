@@ -1,14 +1,17 @@
 import torch.nn as nn
 from torch.nn import BCEWithLogitsLoss
-from transformers import BertModel, BertPreTrainedModel
+# from transformers import BertModel, BertPreTrainedModel
+from transformers import ElectraPreTrainedModel, ElectraModel
 from src.utils.mapper import configmapper
 
 
 @configmapper.map("models", "bert_multi_spans")
-class BertForMultiSpans(BertPreTrainedModel):
+# class BertForMultiSpans(BertPreTrainedModel):
+class BertForMultiSpans(ElectraPreTrainedModel):
     def __init__(self, config):
         super(BertForMultiSpans, self).__init__(config)
-        self.bert = BertModel(config)
+        # self.bert = BertModel(config)
+        self.bert = ElectraModel(config)
         self.num_labels = config.num_labels
 
         # TODO check with Google if it's normal there is no dropout on the token classifier of SQuAD in the TF version

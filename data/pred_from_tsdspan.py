@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 from operator import itemgetter
 from itertools import groupby
 from ast import literal_eval
@@ -35,20 +36,35 @@ if __name__ == "__main__":
   # pred_file = "pred/spans_pred_xlm_base.txt"
   # pred_file = "pred/spans_pred_bn_large_745.txt"
   # pred_file = "pred/spans_pred_debertav3_large.txt"
-  suffix = "bn3500_bnlargefull1_int"
-  pred_file = f"pred/spans_pred_{suffix}.txt"
-  out_file = f"submissions/test_results_{suffix}.csv"
+  model = "bertlargecrf"
+  suffix = "checkpoint-3000"
+  # pred_file = f"pred/bertcrf/spans-pred-test.txt"
+  pred_file = f"pred/{model}/spans-pred-test_{suffix}.txt"
+  # pred_file = f"pred/bertcrf/spans_pred_{suffix}.txt"
+  out_file = f"submissions/{model}/test_results_{model}_{suffix}.csv"
+
+  pred_file = f"pred/spans_pred_bertcrf3000_bertlargecrf3000_union.txt"
+  out_file = f"submissions/spans_pred_bertcrf3000_bertlargecrf3000_union.csv"
   
   train_check = False
-  train_check = True
+  # train_check = True
   if train_check:
     test_file = "train.csv"
-    pred_file = "pred/bert_large_25ep/spans-pred_train_checkpoint-8500.txt"
-    out_file = "pred/bert_large_25ep/train.csv"
 
-    test_file = "test.csv"
-    pred_file = "pred/bert_large_25ep/spans-pred_validation_checkpoint-8500.txt"
-    out_file = "pred/bert_large_25ep/test.csv"
+    # pred_file = "pred/bert_large_25ep/spans-pred_train_checkpoint-8500.txt"
+    # out_file = "pred/bert_large_25ep/train.csv"
+    # pred_file = "pred/bertcrf/spans-pred-train.txt"
+    # out_file = "pred/bertcrf/train.csv"
+    pred_file = "pred/bert/spans-pred_train_checkpoint-500.txt"
+    out_file = "pred/bert/train.csv"
+
+    # test_file = "test.csv"
+    # pred_file = "pred/bert_large_25ep/spans-pred_validation_checkpoint-8500.txt"
+    # out_file = "pred/bert_large_25ep/test.csv"
+  
+
+  # os.makedirs(f"pred/{model}", exist_ok=True)
+  os.makedirs(f"submissions/{model}", exist_ok=True)
 
   
 
