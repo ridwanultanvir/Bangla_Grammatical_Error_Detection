@@ -11,8 +11,10 @@ from collections import defaultdict
 
 # Read bad words csv pandas
 import pandas as pd
-bad_words = pd.read_csv("data/bad_words.csv")
-trainfile = r"../data/submissions/test_results_bn3500_bnlargefull1_int.csv"
+# bad_words = pd.read_csv("data/bad_words.csv")
+bad_words = pd.read_csv("data/bad_words_notd_wiki.csv", encoding='utf-8')
+trainfile = r"../data/submissions/spans_pred_bertcrf3000_bertlargecrf3000_int.csv"
+out_file = "submissions/spans_pred_bertcrf3000_bertlargecrf3000_int_spell.csv"
 col = "Expected"
 train = pd.read_csv(trainfile, encoding='utf-8')
 bad_words = bad_words.values.flatten().tolist()
@@ -20,6 +22,9 @@ bad_words = bad_words.values.flatten().tolist()
 import re
 from tqdm import tqdm
 pattern = re.compile("|".join(bad_words))
+from ner import NER
+model_path = "model/bn_ner.pkl"
+bn_ner = NER(model_path=model_path)
 
 # Iterate over all sentences
 outputs = []
@@ -28,13 +33,22 @@ for idx, sentence in tqdm(enumerate(train[col].tolist()), total=len(train)):
   # bad_words_in_sentence = pattern.fullmatch(sentence)
   # bad_words_in_sentence = pattern.findall(sentence)
   bad_words_in_sentence = []
+  # sentence = "মতিঝিলে সরিষে ইলিশ রেস্তোরাঁয় রিভিউ করতে পারেন$ $, খুবই ভালো পরিবেশ$ $, আর সরিষে মতিঝিলে"
+  # Find the ner tags for the sentence
+  res = bn_ner.tag(sentence)
+  ner_tags = defaultdict(lambda: "O")
+  for r in res:
+    ner_tags[r[0]] = r[1]
   for word in sentence.split():
+    if ner_tags[word] != "O": continue
     if pattern.fullmatch(word):
       bad_words_in_sentence.append(word)
 
   # Replace bad words with $badword$
   output = sentence
+  bad_words_in_sentence = list(set(bad_words_in_sentence))
   for bad_word in bad_words_in_sentence:
+  # if 1:
     # sentence = sentence.replace(bad_word, "$" + bad_word + "$")
   # Print the sentence
   # print(sentence)
@@ -47,6 +61,7 @@ for idx, sentence in tqdm(enumerate(train[col].tolist()), total=len(train)):
     replace_token = "$" + token + "$"
     # sentence = "কিন্তু এখন আপনার জন্য $ঘৃনা$ আমার মনে প্রচন্ড ঘৃনা কাজ জানেন।"
     # sentence = "কিন্তু এখন আপনার জন্য ঘৃনা আমার মনে প্রচন্ড ঘৃনা কাজ জানেন।"
+
     
     for word in sentence.split():
       frequency[word] += 1
@@ -60,6 +75,7 @@ for idx, sentence in tqdm(enumerate(train[col].tolist()), total=len(train)):
 
     print("Output: ", output)
     # break
+  # exit()
 
 
   outputs.append(output)
@@ -67,7 +83,7 @@ for idx, sentence in tqdm(enumerate(train[col].tolist()), total=len(train)):
 
 # Save output to Expected column
 train["Expected"] = outputs
-train.to_csv("submissions/test_results_bn3500_bnlargefull1_int_spell.csv", index=False)
+train.to_csv(out_file, index=False)
 
 
 
