@@ -11,9 +11,18 @@ from collections import defaultdict
 
 # Read bad words csv pandas
 import pandas as pd
-bad_words = pd.read_csv("data/bad_words.csv")
+# bad_words = pd.read_csv("data/bad_words.csv")
+
+bad_words = pd.read_csv("data/bad_words_notd_wiki_man.csv")
+
 # trainfile = r"../data/submissions/test_results_bn3500_bnlargefull1_int.csv"
-trainfile = r"../data/three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-2000.csv"
+# trainfile = r"../data/three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-3000.csv"
+# trainfile = r"../data/three_class/bert_token_3cls_bertlarge7000_banglabert3000_int.csv"
+# trainfile = r"../data/three_class/bert_token_3cls_bertlarge_fullfold1/spans-pred_test_checkpoint-9000.csv"
+# trainfile = r"../data/three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-7000.csv"
+# trainfile = r"../data/three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-3000.csv"
+trainfile = r"../data/pred/3_cls/bert_large/spans-pred_test_checkpoint-6000.csv"
+
 from pathlib import Path
 pred_file_p = Path(trainfile)
 out_file = pred_file_p.parent/(pred_file_p.stem + '_spell.csv')
@@ -86,6 +95,7 @@ for idx, sentence in tqdm(enumerate(train[col].tolist()), total=len(train)):
 
 # Save output to Expected column
 train["Expected"] = outputs
+print("Saving to ", out_file)
 # train.to_csv("submissions/test_results_bn3500_bnlargefull1_int_spell.csv", index=False)
 train.to_csv(out_file, index=False)
 

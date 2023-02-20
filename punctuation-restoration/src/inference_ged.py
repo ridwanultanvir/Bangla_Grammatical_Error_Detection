@@ -49,7 +49,23 @@ def inference():
     deep_punctuation.load_state_dict(torch.load(model_save_path))
     deep_punctuation.eval()
 
-    predfile = "preds/test_results_bn3500_bnlargefull1_int.csv"
+    thresh = 0.9
+    # thresh = 0.8
+    # thresh = 0.75
+    # thresh = 0.7
+    # thresh = 0.6
+    # thresh = 0.5
+    # thresh = 0.1
+    suffix = ""
+    suffix += "_" + f"{thresh: .2f}"
+    suffix += "_ep46"
+
+    # predfile = "preds/test_results_bn3500_bnlargefull1_int.csv"
+    predfile = "../data/pred/3_cls/bert_large/spans-pred_test_checkpoint-6000_spell.csv"
+    from pathlib import Path
+    pred_path = Path(predfile)
+    debug_file = pred_path.parent/(pred_path.stem + "_debug" + suffix + pred_path.suffix)
+    submit_file = pred_path.parent/(pred_path.stem + "_submit" + suffix + pred_path.suffix)
     incol = "Expected"
     # predfile = "preds/DataSetFold1_u.csv"
     # incol = "gt"
@@ -62,16 +78,7 @@ def inference():
     output_expected = []
     
     p_file = open("preds/proba.log", "w")
-    # thresh = 0.9
-    # thresh = 0.8
-    thresh = 0.75
-    # thresh = 0.7
-    # thresh = 0.6
-    # thresh = 0.5
-    # thresh = 0.1
-    suffix = ""
-    suffix += "_" + f"{thresh: .2f}"
-    suffix += "_ep46"
+    
     for index, row in tqdm(preddf.iterrows(), total=len(preddf)):
         # print(row[incol])
         text = row[incol]
@@ -204,11 +211,11 @@ def inference():
     print("Mean of Levenstein distance: ", df['Levenstein'].mean())
     print("Sum of differences: ", df['diff'].sum())
     # preddf.to_csv(f"preds/data_debug{suffix}.csv", index=False)
-    preddf.to_csv(f"preds/test_results_bn3500_bnlargefull1_int_punct_gedtrain_debug{suffix}.csv", index=False)
+    preddf.to_csv(debug_file, index=False)
     # Prepare the submission file
     preddf[incol] = preddf["punct"]
     preddf = preddf.drop(columns=["punct", "diff", "Levenstein"])
-    preddf.to_csv(f"preds/test_results_bn3500_bnlargefull1_int_punct_gedtrain_submit{suffix}.csv", index=False)
+    preddf.to_csv(submit_file, index=False)
 
 
 if __name__ == '__main__':

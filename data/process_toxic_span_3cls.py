@@ -60,7 +60,7 @@ def get_spans(sentence):
   # print("Is: ", Is)
   # print("Number of ignored spans: ", count_ignore)
   if count_ignore > 0:
-    with open("ignored_3cls.txt", "a", encoding="utf-8") as f:
+    with open("processed_data/ignored_3cls.txt", "a", encoding="utf-8") as f:
       f.write(sentence + "\n")
     # print("Sentence: ", sentence)
   # exit()
@@ -69,7 +69,7 @@ def get_spans(sentence):
 if __name__ == "__main__":
   # Read data from DataSetFold1.csv\DataSetFold1.csv
   import pandas as pd
-  df = pd.read_csv(r"DataSetFold1.csv/DataSetFold1.csv")
+  df = pd.read_csv(r"DataSetFold1_u.csv/DataSetFold1_u.csv")
   # Apply the get_spans function to the text column
   df["text"], df["spans"], df["count_ignore"], df["Bs"], df["Is"] = zip(*df["gt"].apply(get_spans))
   print("Sum of ignored spans: ", df["count_ignore"].sum())
@@ -83,12 +83,31 @@ if __name__ == "__main__":
   # Save the dataframe to a csv file
   stat = df['same'].value_counts()
   print(stat)
-  df.to_csv("DataSetFold1_processed_3cls.csv", index=False)
+  df.to_csv("processed_data/DataSetFold1_processed_3cls.csv", index=False)
   #Create .2 train test split
   from sklearn.model_selection import train_test_split
-  train, test = train_test_split(df, test_size=0.2, random_state=42, stratify=df['same'])
-  train.to_csv("train_3cls.csv", index=False)
-  test.to_csv("test_3cls.csv", index=False)
+
+  # Find the levenstein distances whose count is 1
+  distances = df['distance'].value_counts()
+  print(distances)
+  distances = distances[distances == 1]
+  print(distances)
+  # # Find the indices of the rows with the above distances, and replace them with next higher distance which has count > 1
+  # for distance in distances.index:
+  #   df.loc[df['distance'] == distance, 'distance'] = distance + 1
+
+  for distance in distances.index:
+    df.loc[df['distance'] == distance, 'distance'] = 0
+  
+  distances = df['distance'].value_counts()
+  print(distances)
+
+  train, test = train_test_split(df, test_size=0.2, random_state=42, stratify=df['distance'])
+  print(train['distance'].value_counts())
+  print(test['distance'].value_counts())
+
+  train.to_csv("processed_data/train_3cls.csv", index=False)
+  test.to_csv("processed_data/test_3cls.csv", index=False)
 
 
   

@@ -3,6 +3,10 @@ from transformers import AutoTokenizer
 from datasets import load_dataset
 import numpy as np
 
+import pdb
+
+from normalizer import normalize
+
 
 @configmapper.map("datasets", "toxic_spans_crf_3cls_tokens")
 class ToxicSpansCRF3ClsTokenDataset:
@@ -22,6 +26,8 @@ class ToxicSpansCRF3ClsTokenDataset:
         )
 
     def tokenize_and_align_labels_for_train(self, examples):
+        print("Tokenizing and aligning labels for train...")
+        # examples["text"] = normalize(examples["text"])
         tokenized_inputs = self.tokenizer(
             examples["text"], **self.config.tokenizer_params
         )
@@ -86,7 +92,8 @@ class ToxicSpansCRF3ClsTokenDataset:
                     #     labels[-1].append(1)
                     # else:
                     #     labels[-1].append(0)
-                    # prediction_mask[i][j] = 1
+
+                    prediction_mask[i][j] = 1
                     
                     b_off = [x in Bs for x in range(offsets[0], offsets[1])]
                     b_off = sum(b_off)
@@ -103,12 +110,15 @@ class ToxicSpansCRF3ClsTokenDataset:
                         # print(j)
                     else:
                         labels[-1].append(2)
+        
+        # pdb.set_trace()
 
         tokenized_inputs["labels"] = labels
         tokenized_inputs["prediction_mask"] = prediction_mask
         return tokenized_inputs
 
     def tokenize_for_test(self, examples):
+        # examples["text"] = normalize(examples["text"])
         tokenized_inputs = self.tokenizer(
             examples["text"], **self.config.tokenizer_params
         )

@@ -31,7 +31,7 @@ def replace_end(x):
 
 if __name__ == "__main__":
   # Read test_tsd.csv
-  test_file = "test_tsd.csv"
+  test_file = "processed_data/test_tsd.csv"
   # pred_file = "pred/spans-pred_test.txt"
   # pred_file = "pred/spans_pred_bn_large.txt"
   # pred_file = "pred/spans_pred_xlm_base.txt"
@@ -45,8 +45,13 @@ if __name__ == "__main__":
   out_file = f"submissions/{model}/test_results_{model}_{suffix}.csv"
 
   # test_file = "train_3cls.csv"
-  pred_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-2000.txt"
+  # pred_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-3000.txt"
+  # pred_file = f"./three_class/bert_token_3cls_bertlarge7000_banglabert3000_int.txt"
+  # pred_file = f"./three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-7000.txt"
   # out_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_train_checkpoint-2000.csv"
+  # pred_file = f"./three_class/bertcrf_3cls/spans-pred-train_checkpoint-500.txt"
+  pred_file = "pred/3_cls/bert_large/spans-pred_test_checkpoint-6000.txt"
+
   pred_file_p = Path(pred_file)
   out_file = pred_file_p.parent/(pred_file_p.stem + '.csv')
 
@@ -58,7 +63,7 @@ if __name__ == "__main__":
   train_check = False
   # train_check = True
   if train_check:
-    # test_file = "train_3cls.csv"
+    test_file = "train_3cls.csv"
 
     # pred_file = "pred/bert_large_25ep/spans-pred_train_checkpoint-8500.txt"
     # out_file = "pred/bert_large_25ep/train.csv"
@@ -66,7 +71,8 @@ if __name__ == "__main__":
     # out_file = "pred/bertcrf/train.csv"
     # pred_file = "pred/bert/spans-pred_train_checkpoint-500.txt"
     # out_file = "pred/bert/train.csv"
-    pred_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_train_checkpoint-2000.txt"
+    # pred_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_train_checkpoint-2000.txt"
+    pred_file = f"./three_class/bertcrf_3cls/spans-pred-train_checkpoint-500.txt"
     pred_file_p = Path(pred_file)
     out_file = pred_file_p.parent/(pred_file_p.stem + '.csv')
 

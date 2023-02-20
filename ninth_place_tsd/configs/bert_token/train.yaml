@@ -1,11 +1,11 @@
 model_name: autotoken
 pretrained_args:
-  pretrained_model_name_or_path: xlm-roberta-large
+  # pretrained_model_name_or_path: xlm-roberta-large
   # pretrained_model_name_or_path: bert-base-multilingual-uncased
   # pretrained_model_name_or_path: bigscience/bloom-560m
   # pretrained_model_name_or_path: csebuetnlp/banglishbert
 
-  # pretrained_model_name_or_path: csebuetnlp/banglabert_large
+  pretrained_model_name_or_path: csebuetnlp/banglabert_large
   # pretrained_model_name_or_path:  xlm-roberta-base
   # pretrained_model_name_or_path: microsoft/deberta-v3-large
   # pretrained_model_name_or_path: microsoft/deberta-v3-base
@@ -16,7 +16,7 @@ pretrained_args:
   num_labels: 2
 
 # model_id: bert_large_25ep
-model_id: xlm_roberta_large
+# model_id: xlm_roberta_large
 # model_id: bert-base-multilingual-uncased
 # model_id: bloom-560m
 # model_id: banglishbert

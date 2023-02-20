@@ -1,9 +1,14 @@
 model_name: bert_crf_3cls_token
-# model_id: banglabert_large
-model_id: banglabert
+
+model_id: banglabert_large
+# model_id: banglabert_large_norm
+# model_id: banglabert_large_lr1e-5_wd_0.05
+# model_id: banglabert
+
 results_dir: ./results/fixed/${model_name}/${model_id}
 dataset:
-  name: toxic_spans_crf_3cls_tokens
+  # name: toxic_spans_crf_3cls_tokens
+  name: toxic_spans_crf_3cls_tokens_norm
   # model_checkpoint_name: ${results_dir}/final_model
   model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3000
   train_files:
@@ -11,7 +16,7 @@ dataset:
     validation: ./data/vasha23_3cls/test_3cls.csv # ./data/tsd_trial.csv
     # original_test: ./data/tsd_test_spans.csv
   eval_files:
-    test: ./data/vasha23/test_tsd.csv # ./data/tsd_test.csv
+    test: ./data/test_tsd.csv # ./data/tsd_test.csv
   label_cls: true
   cls_threshold: 0.3 # can be tuned
   token_threshold: 0.0 # can be tuned
@@ -25,6 +30,6 @@ pretrained_args:
   num_labels: 4
   lstm_hidden_size: 128
   lstm_layers: 1
-with_ground: false # true
-# with_ground: true
+# with_ground: false # true
+with_ground: true
 save_dir: ${results_dir}/preds/

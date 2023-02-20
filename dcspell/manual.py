@@ -11,9 +11,9 @@ words = [
 
 
 import pandas as pd
-bad_words = pd.read_csv("data/bad_words_ner.csv", encoding='utf-8')
+bad_words = pd.read_csv("data/bad_words_notd_wiki.csv", encoding='utf-8')
 
 # Filter rows that does **not** contain any of the words
 bad_words = bad_words[~bad_words.isin(words).any(axis=1)]
 # Save the dataframe 
-bad_words.to_csv('data/bad_words_ner_man.csv', index=False)
+bad_words.to_csv('data/bad_words_notd_wiki_man.csv', index=False)

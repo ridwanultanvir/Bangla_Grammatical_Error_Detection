@@ -224,7 +224,10 @@ edit_distance = Levenshtein.distance
 if not os.path.exists(eval_config.save_dir):
   os.makedirs(eval_config.save_dir)
 
+# print("Eval_config.model_name: ", eval_config.model_name); exit()
+
 if "crf_3cls" in eval_config.model_name:
+  print("Predicting CRF 3 Class")
   if eval_config.with_ground:
     for key in tokenized_train_dataset.keys():
       with open(
@@ -283,7 +286,7 @@ if "crf_3cls" in eval_config.model_name:
       with open(
         os.path.join(eval_config.save_dir, f"spans-pred-{key}_{suffix}.txt"), "w"
       ) as f:
-        for i, pred, pred_I in tqdm(enumerate(zip(predicted_spans, predicted_spans_I)), total=len(predicted_spans)):
+        for i, (pred, pred_I) in tqdm(enumerate(zip(predicted_spans, predicted_spans_I)), total=len(predicted_spans)):
           # if i == len(preds) - 1:
           #   f.write(f"{i}\t{str(pred)}")
           # else:
@@ -416,7 +419,7 @@ if "crf_3cls" in eval_config.model_name:
             f.write(f"{i}\t{str(pred)}\t{str(pred_I)}\n")
 
 
-if "crf" in eval_config.model_name:
+elif "crf" in eval_config.model_name:
   if eval_config.with_ground:
     for key in tokenized_train_dataset.keys():
       with open(
@@ -1153,7 +1156,8 @@ elif "token_spans" in eval_config.model_name:
               f.write(f"{row_number}\t{str(final_predicted_spans)}")
 
 
-elif "tokens_3cls" in eval_config.model_name:
+elif "token_3cls" in eval_config.model_name:
+  print("Token 3cls eval running...") 
   trainer = Trainer(
     model=model,
   )
@@ -1173,6 +1177,9 @@ elif "tokens_3cls" in eval_config.model_name:
         os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
       ) as f:
         f.write(f"Model Name: {suffix}, Dataset: {key}\n")
+
+      # outputs = []
+      # gts = [] 
       
       with open(
         # os.path.join(eval_config.save_dir, f"spans-pred_{key}_{suffix}.txt"), "w"
@@ -1276,6 +1283,8 @@ elif "tokens_3cls" in eval_config.model_name:
           edit = edit_distance(output, gt)
 
           edit_scores.append(edit)
+          # outputs.append(output)
+          # gts.append(gt)
 
           f1_scores.append(
             f1(
@@ -1283,6 +1292,16 @@ elif "tokens_3cls" in eval_config.model_name:
               eval(temp_untokenized_spans[i]),
             )
           )
+        
+      # from pandarallel import pandarallel
+
+      # pandarallel.initialize()
+      # tqdm.pandas()
+      
+      # df = pd.DataFrame({"output": outputs, "gt": gts})
+      # # Computer edit distance
+      # edit_scores = df.parallel_appy(lambda x: edit_distance(x["output"], x["gt"]), axis=1)
+
       with open(
         # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
         os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"

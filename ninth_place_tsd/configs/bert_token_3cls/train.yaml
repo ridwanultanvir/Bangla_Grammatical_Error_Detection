@@ -16,13 +16,15 @@ pretrained_args:
   num_labels: 3
 
 # model_id: banglabert
-model_id: banglabert_large
+model_id: banglabert_large_adamw
 # model_id: bert_large_25ep
 # model_id: xlm_roberta_large
 # model_id: bert-base-multilingual-uncased
 # model_id: bloom-560m
 # model_id: banglishbert
 # model_id: mGPT
+
+# freeze_backbone: True
 
 results_dir: ./results/fixed/bert_token_3cls/${model_id}
 # eval_log_save: 10
@@ -31,6 +33,7 @@ eval_log_save: 500
 args:
   output_dir: ${results_dir}/ckpts/
   evaluation_strategy: steps
+  optim: adamw_torch
   eval_steps: ${eval_log_save}
   logging_steps: ${eval_log_save}
   logging_first_step: true

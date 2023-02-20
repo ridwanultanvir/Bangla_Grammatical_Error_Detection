@@ -38,6 +38,8 @@ import os
 import gc
 import ipdb
 
+import sys
+
 untokenized_train_dataset_cache = None
 # TODO: do for three classes
 def compute_metrics_token(p):
@@ -122,6 +124,10 @@ parser.add_argument(
 args = parser.parse_args()
 # print(vars(args))
 train_config = OmegaConf.load(args.train)
+# sys.stdout = open(f'{train_config.args.output_dir}/out.log', 'a+')
+# Redirect stdout to file, if file exists, append to it else create a new file
+
+
 data_config = OmegaConf.load(args.data)
 
 print(data_config.train_files)
@@ -153,6 +159,10 @@ elif "toxic-roberta" in train_config.pretrained_args.pretrained_model_name_or_pa
 
 else:
     model = model_class.from_pretrained(**train_config.pretrained_args)
+    # import pdb; pdb.set_trace()
+    if 'freeze_backbone' in train_config.keys() and train_config.freeze_backbone:
+        for param in model.electra.parameters():
+            param.requires_grad = False
 
 tokenizer = AutoTokenizer.from_pretrained(data_config.model_checkpoint_name)
 # if data_config.model_checkpoint_name == "sberbank-ai/mGPT":
@@ -182,6 +192,8 @@ else:
 
 if not os.path.exists(train_config.args.output_dir):
     os.makedirs(train_config.args.output_dir)
+
+sys.stdout = open(f'{train_config.args.output_dir[:-7]}/out.log', 'a+')
 checkpoints = sorted(
     os.listdir(train_config.args.output_dir), key=lambda x: int(x.split("-")[1])
 )
@@ -240,3 +252,5 @@ else:
 if not os.path.exists(train_config.save_model_path):
     os.makedirs(train_config.save_model_path)
 trainer.save_model(train_config.save_model_path)
+
+os.system('spd-say "Training is done."')
