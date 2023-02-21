@@ -193,11 +193,50 @@ def replace_fixed(x):
   return x
 
 end_chars = ['।', '?', '!', 
-      # '$'
-  ]
-
+          # '$'
+]
+end_char_before = ['।', '?', '!', '.', '*']
+end_before = [x+ "$" for x in end_char_before]
+# temp = open("temp.txt", "w")
 def replace_end(x):
-  return x if x[-1] in end_chars else x + "$$"
+  if len(x) == 0:
+    return x
+  # Find the last character position from the end of the string which is not a space
+  # last_char_pos = len(x) - 1
+  # while x[last_char_pos] == " ":
+  #   last_char_pos -= 1
+  # Find the last character position from the end of the string which is not a space using regex
+  # Already handled
+  # if x.endswith("$$$"):
+  #   print(x)
+  # temp.write(x + "\n")
+
+
+  if x.endswith("$$$$"):
+    # print("End with $$$$", x)
+    return x[:-2]
+
+  if len(x) >= 2 and x[-2:] in end_before:
+    # print("End with punct$", x)
+    # print(x)
+    return x
+
+  if x.endswith("$$"):
+    return x
+
+  # last_char_pos = re.search(r"\s+$", x)
+  # if last_char_pos is None:
+  #   return x if x[-1] in end_chars else x + "$$"
+  # last_char_pos = last_char_pos.start()
+  # # If the last character is not in end_chars then add a  $$
+  # return x if x[last_char_pos] in end_chars else x[:last_char_pos+1] + "$$" + x[last_char_pos+1:]
+  x =  x if x[-1] in end_chars else x + "$$"
+
+  if x.endswith('$$ $$'):
+    # print("End with $$ $$", x)
+    x = x[:-5] + '$$ '
+  
+  return x
 
 if "crf" in eval_config.model_name:
   data_collator = DataCollatorForTokenClassification(tokenizer)
@@ -224,7 +263,7 @@ edit_distance = Levenshtein.distance
 if not os.path.exists(eval_config.save_dir):
   os.makedirs(eval_config.save_dir)
 
-# print("Eval_config.model_name: ", eval_config.model_name); exit()
+print("Eval_config.model_name: ", eval_config.model_name)
 
 if "crf_3cls" in eval_config.model_name:
   print("Predicting CRF 3 Class")
@@ -1350,6 +1389,222 @@ elif "token_3cls" in eval_config.model_name:
           #     f.write(f"{i}\t{str(predicted_spans)}\n")
           if 1:
             f.write(f"{i}\t{str(predicted_spans)}\t{str(predicted_spans_I)}\n")
+
+elif "token_4cls" in eval_config.model_name:
+  print("Token 4cls eval running...") 
+  trainer = Trainer(
+    model=model,
+  )
+  if eval_config.with_ground:
+    for key in tokenized_train_dataset.keys():
+      temp_offset_mapping = tokenized_train_dataset[key]["offset_mapping"]
+      predictions = trainer.predict(tokenized_train_dataset[key])
+      temp_untokenized_spans = untokenized_train_dataset[key]["spans"]
+      # print(untokenized_train_dataset[key])
+
+      preds = predictions.predictions
+      preds = np.argmax(preds, axis=2)
+      f1_scores = []
+      edit_scores = []
+      with open(
+        # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
+        os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
+      ) as f:
+        f.write(f"Model Name: {suffix}, Dataset: {key}\n")
+
+      # outputs = []
+      # gts = [] 
+      
+      with open(
+        # os.path.join(eval_config.save_dir, f"spans-pred_{key}_{suffix}.txt"), "w"
+        os.path.join(eval_config.save_dir, f"spans-pred_{key}_{suffix}.txt"), "w"
+      ) as f:
+        for i, pred in tqdm(enumerate(preds), total=len(preds)):
+          # print(key,i)
+          ## Batch Wise
+          # print(len(prediction))
+          predicted_spans = []
+          predicted_spans_I = []
+          predicted_spans_E = []
+          for j, tokenwise_prediction in enumerate(
+            pred[: len(temp_offset_mapping[i])]
+          ):
+            if tokenwise_prediction == 1:
+              predicted_spans += list(
+                range(
+                  temp_offset_mapping[i][j][0],
+                  temp_offset_mapping[i][j][1],
+                )
+              )
+            elif tokenwise_prediction == 2:
+              predicted_spans_I += list(
+                range(
+                  temp_offset_mapping[i][j][0],
+                  temp_offset_mapping[i][j][1],
+                )
+              )
+            elif tokenwise_prediction == 3:
+              predicted_spans_E += list(
+                range(
+                  temp_offset_mapping[i][j][0],
+                  temp_offset_mapping[i][j][1],
+                )
+              )
+          # if i == len(preds) - 1:
+          #     f.write(f"{i}\t{str(predicted_spans)}\t{str(predicted_spans)}")
+          # else:
+          if 1:
+            f.write(f"{i}\t{str(predicted_spans)}\t{str(predicted_spans_I)}\t{str(predicted_spans_E)}\n")
+          
+          # Edit distance
+          ranges = get_ranges(predicted_spans)
+          ranges_I = get_ranges(predicted_spans_I)
+          ranges_E = get_ranges(predicted_spans_E)
+          # print("ranges: ", ranges)
+          # Get substring from span range
+          range_merged = []
+          for i, rng_I in enumerate(ranges_I):
+            if rng_I is None:
+              continue
+            for j, rng_B in enumerate(ranges):
+              if rng_B is None:
+                continue
+
+              # print(rng_B, rng_I)
+              if (rng_I.start == (rng_B.stop + 2)) and (rng_B.stop + 1 not in predicted_spans): 
+                # handle one space between them
+                new_rng = range(rng_B.start, rng_I.stop)
+                # print(new_rng)
+                range_merged.append(new_rng)
+                ranges_I[i] = None
+                ranges[j] = None
+                # exit()
+                break
+          
+          # Filter all Nones from ranges and ranges_I
+          ranges = [rng for rng in ranges if rng is not None]
+          ranges_I = [rng for rng in ranges_I if rng is not None]
+
+          ranges = ranges + ranges_I + range_merged + ranges_E
+          # print("ranges: ", ranges)
+          # Sort ranges by start
+          ranges.sort(key=lambda x: x.start)
+            
+          sentence = untokenized_train_dataset[key]["sentence"][i]
+          gt       = untokenized_train_dataset[key]["gt"][i]
+          output = ""
+          prev_s = 0
+          for i, span in enumerate(ranges):
+            # if type(span) == int:
+            #   s = span
+            #   e = span + 1
+            # else:
+            if 1:
+              s = span.start
+              e = span.stop + 1
+            
+            if s >= len(sentence):
+              break
+
+            if s in predicted_spans_E:
+              output += sentence[prev_s:e] + "$$"
+            else:
+              output += sentence[prev_s:s] + "$" + sentence[s:e] + "$"
+            prev_s = e
+            
+          if prev_s < len(sentence):
+            output += sentence[prev_s:]
+          
+          output = replace_fixed(output)
+          output = replace_end(output)
+          
+          # print("output: ", output)
+          # gt = untokenized_train_dataset[key]["gt"][i]
+          # save output and gt to file
+          # with open(os.path.join(eval_config.save_dir, f"output_{key}_{suffix}.txt"), "a+") as outfile:
+          #     outfile.write(gt + "\n")
+          #     # outfile.write(sentence + "\n")
+          #     outfile.write(output + "\n")
+          #     outfile.write("\n")
+
+          edit = edit_distance(output, gt)
+
+          edit_scores.append(edit)
+          # outputs.append(output)
+          # gts.append(gt)
+
+          f1_scores.append(
+            f1(
+              predicted_spans,
+              eval(temp_untokenized_spans[i]),
+            )
+          )
+        
+      # from pandarallel import pandarallel
+
+      # pandarallel.initialize()
+      # tqdm.pandas()
+      
+      # df = pd.DataFrame({"output": outputs, "gt": gts})
+      # # Computer edit distance
+      # edit_scores = df.parallel_appy(lambda x: edit_distance(x["output"], x["gt"]), axis=1)
+
+      with open(
+        # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
+        os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
+      ) as f:
+        f.write(str(np.mean(f1_scores)))
+        f.write(" ")
+        f.write(str(np.mean(edit_scores)))
+        f.write("\n")
+  else:
+    for key in tokenized_test_dataset.keys():
+      temp_offset_mapping = tokenized_test_dataset[key]["offset_mapping"]
+      predictions = trainer.predict(tokenized_test_dataset[key])
+      preds = predictions.predictions
+      preds = np.argmax(preds, axis=2)
+      f1_scores = []
+      with open(
+        os.path.join(eval_config.save_dir, f"spans-pred_{key}_{suffix}.txt"), "a"
+      ) as f:
+        for i, pred in tqdm(enumerate(preds)):
+          # print(key,i)
+          ## Batch Wise
+          # print(len(prediction))
+          predicted_spans = []
+          predicted_spans_I = []
+          predicted_spans_E = []          
+          for j, tokenwise_prediction in enumerate(
+            pred[: len(temp_offset_mapping[i])]
+          ):
+            if tokenwise_prediction == 1:
+              predicted_spans += list(
+                range(
+                  temp_offset_mapping[i][j][0],
+                  temp_offset_mapping[i][j][1],
+                )
+              )
+            elif tokenwise_prediction == 2:
+              predicted_spans_I += list(
+                range(
+                  temp_offset_mapping[i][j][0],
+                  temp_offset_mapping[i][j][1],
+                )
+              )
+            elif tokenwise_prediction == 3:
+              predicted_spans_E += list(
+                range(
+                  temp_offset_mapping[i][j][0],
+                  temp_offset_mapping[i][j][1],
+                )
+              )
+
+          # if i == len(preds) - 1:
+          #     f.write(f"{i}\t{str(predicted_spans)}")
+          # else:
+          #     f.write(f"{i}\t{str(predicted_spans)}\n")
+          if 1:
+            f.write(f"{i}\t{str(predicted_spans)}\t{str(predicted_spans_I)}\t{str(predicted_spans_E)}\n")
 
 
 elif "token" in eval_config.model_name:

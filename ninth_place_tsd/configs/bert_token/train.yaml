@@ -5,11 +5,11 @@ pretrained_args:
   # pretrained_model_name_or_path: bigscience/bloom-560m
   # pretrained_model_name_or_path: csebuetnlp/banglishbert
 
-  pretrained_model_name_or_path: csebuetnlp/banglabert_large
+  # pretrained_model_name_or_path: csebuetnlp/banglabert_large
   # pretrained_model_name_or_path:  xlm-roberta-base
   # pretrained_model_name_or_path: microsoft/deberta-v3-large
   # pretrained_model_name_or_path: microsoft/deberta-v3-base
-  # pretrained_model_name_or_path: csebuetnlp/banglabert
+  pretrained_model_name_or_path: csebuetnlp/banglabert
   # pretrained_model_name_or_path: sagorsarker/bangla-bert-base
 
   # pretrained_model_name_or_path: sberbank-ai/mGPT
@@ -21,6 +21,9 @@ pretrained_args:
 # model_id: bloom-560m
 # model_id: banglishbert
 # model_id: mGPT
+# model_id: banglabert
+model_id: banglabert_lr2e-6
+# model_id: banglabert_large
 
 results_dir: ./results/fixed/bert_token/${model_id}
 eval_log_save: 500 # 500 
@@ -32,8 +35,10 @@ args:
   logging_steps: ${eval_log_save}
   logging_first_step: true
   logging_dir: ${results_dir}/logs/
-  learning_rate: 2e-5
+  # learning_rate: 2e-5
+  learning_rate: 2e-6
   save_steps: 500
+  # gradient_accumulation_steps: 4
   per_device_train_batch_size: 8 # 4 # originally used 2
   per_device_eval_batch_size: 8 # 4 # originally used 2
   num_train_epochs: 10 # 5 # originally 5

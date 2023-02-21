@@ -23,9 +23,41 @@ def replace_fixed(x):
 
 end_chars = ['।', '?', '!', 
           # '$'
-    ]
-
+]
+end_char_before = ['।', '?', '!', '.', '*']
+end_before = [x+ "$" for x in end_char_before]
+# temp = open("temp.txt", "w")
 def replace_end(x):
+  if len(x) == 0:
+    return x
+  # Find the last character position from the end of the string which is not a space
+  # last_char_pos = len(x) - 1
+  # while x[last_char_pos] == " ":
+  #   last_char_pos -= 1
+  # Find the last character position from the end of the string which is not a space using regex
+  # Already handled
+  # if x.endswith("$$$"):
+  #   print(x)
+  # temp.write(x + "\n")
+
+  if x.endswith("$$$$"):
+    # print("End with $$$$", x)
+    return x[:-2]
+
+  if len(x) >= 2 and x[-2:] in end_before:
+    print("End with punct$", x)
+    # print(x)
+    return x
+
+  if x.endswith("$$"):
+    return x
+
+  # last_char_pos = re.search(r"\s+$", x)
+  # if last_char_pos is None:
+  #   return x if x[-1] in end_chars else x + "$$"
+  # last_char_pos = last_char_pos.start()
+  # # If the last character is not in end_chars then add a  $$
+  # return x if x[last_char_pos] in end_chars else x[:last_char_pos+1] + "$$" + x[last_char_pos+1:]
   return x if x[-1] in end_chars else x + "$$"
 
 if __name__ == "__main__":

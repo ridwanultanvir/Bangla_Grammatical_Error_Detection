@@ -564,6 +564,15 @@ def main():
   
     def calculate_bleu(pred_lns, tgt_lns, **kwargs):
         # import pdb; pdb.set_trace()
+        import pandas as pd
+        df = pd.DataFrame({"tgt": tgt_lns, "pred": pred_lns})
+        df["diff"] = df['tgt'] != df['pred']
+        # Get timestamp
+        import time
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        df.to_csv(f"outputs/pred_{timestamp}.csv")
+
+
         
 
         return {

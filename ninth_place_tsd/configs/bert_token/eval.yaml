@@ -9,8 +9,12 @@ model_name: autotoken
 # model_id: banglabert_10ep
 # model_id: debertav3large
 # model_id: deberta-v3-base
-model_id: bert_large_25ep
+# model_id: bert_large_25ep
 # model_id: banglabert_large_full_fold1
+# model_id: banglabert_large
+model_id: banglabert
+# model_id: banglabert_lr2e-6
+
 results_dir: ./results/fixed/bert_token/${model_id}
 dataset:
   batch_size: 32
@@ -24,7 +28,7 @@ dataset:
     validation: ./data/vasha23/valid.csv # ./data/tsd_trial.csv
     # original_test: ./data/tsd_test_spans.csv
   eval_files:
-    test: ./data/vasha23/test_tsd.csv # ./data/tsd_test.csv
+    test: ./data/test_tsd.csv # ./data/tsd_test.csv
   label_cls: true
   cls_threshold: 0.3 # can be tuned
   token_threshold: 0.0 # can be tuned
