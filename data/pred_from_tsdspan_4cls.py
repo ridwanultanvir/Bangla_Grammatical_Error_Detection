@@ -75,6 +75,8 @@ def replace_end(x):
 if __name__ == "__main__":
   # Read test_tsd.csv
   test_file = "processed_data/test_tsd.csv"
+  test_file = "../external_datasets/sazzed2019sentiment/processed/all_p8500_n3307.csv"
+
   # pred_file = "pred/spans-pred_test.txt"
   # pred_file = "pred/spans_pred_bn_large.txt"
   # pred_file = "pred/spans_pred_xlm_base.txt"
@@ -95,6 +97,7 @@ if __name__ == "__main__":
   # pred_file = f"./three_class/bertcrf_3cls/spans-pred-train_checkpoint-500.txt"
   # pred_file = "./pred/bert_token_4cls_bertlarge/spans-pred_test_checkpoint-8500.txt"
   pred_file = './pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500.txt'
+  pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-8000_sent11k.txt"
 
 
   pred_file_p = Path(pred_file)
