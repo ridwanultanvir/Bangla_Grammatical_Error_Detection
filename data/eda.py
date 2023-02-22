@@ -35,6 +35,8 @@ extraction: converstion to word file, or use [OCR](https://github.com/tesseract-
 # Transliteration/Foreign Words: api use transliterate/common english words in bangla
 # Learn english words in bangla
 
+Can also use: https://stackabuse.com/text-translation-with-google-translate-api-in-python/ 
+
 https://pypi.org/project/google-transliteration-api/
 
 আসলে এলিজাবেথ, আমার $প্রাকটিস$ শেষ করে তোমার সাথে কথা বলতে চাই।
