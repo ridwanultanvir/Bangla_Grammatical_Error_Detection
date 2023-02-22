@@ -36,4 +36,10 @@ Basically, bangla spell detection+correction dataset
 ### punctuation-restoration
 * run.sh
 
+
+## Literature
+
+[Judge a Sentence by Its Content to Generate Grammatical Errors](https://arxiv.org/pdf/2208.09693.pdf)
+
+[BSpell: A CNN-blended BERT Based Bengali Spell Checker](https://arxiv.org/pdf/2208.09709.pdf)
   
