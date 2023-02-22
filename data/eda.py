@@ -1,4 +1,6 @@
 '''
+# Prothom alo corpus: https://www.kaggle.com/datasets/furcifer/bangla-newspaper-dataset
+
 # সমোচ্চারিত শব্দ: find exhaustive list and deterministic replace
 # pdf tesseract ocr
 
