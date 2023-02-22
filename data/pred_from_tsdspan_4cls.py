@@ -17,7 +17,10 @@ def get_ranges(data):
   return ranges
 
 
-space_chars = ['।', '?', '!', ",", '"']
+space_chars = [
+  '।', '?', '!', ",", 
+  # '"'
+]
 def replace_fixed(x):
   for char in space_chars:
     x = x.replace(" "+char, "$ $"+char)
