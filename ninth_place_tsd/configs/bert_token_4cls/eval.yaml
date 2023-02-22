@@ -26,7 +26,7 @@ dataset:
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-15000
 
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
-  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-18500
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-8000
   # {'eval_loss': 0.20323185622692108, 'eval_Token-Wise F1': 0.9362618195686405, 'eval_Offset-Wise F1': 0.7452573315843102, 'eval_runtime': 39.2, 'eval_samples_per_second': 47.883, 'eval_steps_per_second': 5.995, 'epoch': 2.13}
 
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
