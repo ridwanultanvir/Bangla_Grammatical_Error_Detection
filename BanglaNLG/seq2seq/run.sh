@@ -18,7 +18,7 @@ CUDA_VISIBLE_DEVICES=0 python ./run_seq2seq.py \
     --num_train_epochs 20 \
     --do_train --do_eval \
     --do_predict  --predict_with_generate \
-    --resume_from_checkpoint "outputs/checkpoint-1287"
+    --resume_from_checkpoint "outputs/checkpoint-1755"
 
 # --do_eval 
 # --do_predict  --predict_with_generate

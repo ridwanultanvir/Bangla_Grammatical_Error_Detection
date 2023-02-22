@@ -154,6 +154,8 @@ if __name__ == "__main__":
 
 
     range_merged = []
+    t_I = []
+    t_E = []
     for i, rng_I in enumerate(ranges_I):
       if rng_I is None:
         continue
@@ -173,6 +175,7 @@ if __name__ == "__main__":
     # Filter all Nones from ranges and ranges_I
     ranges = [rng for rng in ranges if rng is not None]
     ranges_I = [rng for rng in ranges_I if rng is not None]
+  
 
     ranges = ranges + ranges_I + range_merged
     # print("ranges: ", ranges)
