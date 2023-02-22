@@ -90,7 +90,9 @@ if __name__ == "__main__":
   # pred_file = f"./three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-7000.txt"
   # out_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_train_checkpoint-2000.csv"
   # pred_file = f"./three_class/bertcrf_3cls/spans-pred-train_checkpoint-500.txt"
-  pred_file = "./pred/bert_token_4cls_bertlarge/spans-pred_test_checkpoint-8500.txt"
+  # pred_file = "./pred/bert_token_4cls_bertlarge/spans-pred_test_checkpoint-8500.txt"
+  pred_file = './pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500.txt'
+
 
   pred_file_p = Path(pred_file)
   out_file = pred_file_p.parent/(pred_file_p.stem + '.csv')
@@ -136,6 +138,8 @@ if __name__ == "__main__":
   print("test_tsd: ", test_tsd.head())
   print("pred: ", pred.head())
   outputs = []
+  t_I = []
+  t_E = []
   # for pred_3, test_tsd_3 in zip(pred.iloc[:, 2], test_tsd.iloc[:, 0]):
   for pred_3, pred_3_I, pred_3_E, test_tsd_3 in zip(pred.iloc[:, 1], pred.iloc[:, 2], pred.iloc[:, 3],test_tsd.iloc[:, 0]):
     # Get third row of pred, test_tsd
@@ -192,6 +196,8 @@ if __name__ == "__main__":
     ranges = [rng for rng in ranges if rng is not None]
     ranges_I = [rng for rng in ranges_I if rng is not None]
 
+    t_I += ranges_I
+    t_E += ranges_E
     ranges = ranges + ranges_I + range_merged + ranges_E
     # print("ranges: ", ranges)
     # Sort ranges by start
@@ -257,6 +263,9 @@ if __name__ == "__main__":
   # test_tsd = test_tsd[["gt", "Expected"]]
   # Save the dataframe to a csv file start index is 1, index=True
   test_tsd.to_csv(out_file, index=True, index_label="Id")
+  # print(t_I)
+  # print(t_E)
+  # print(len(t_I), len(t_E))
 
   
 

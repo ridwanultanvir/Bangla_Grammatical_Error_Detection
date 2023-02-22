@@ -12,7 +12,11 @@ model_name: autotoken_4cls
 # model_id: banglabert_large_full_fold1
 # model_id: banglabert
 # model_id: banglabert_large
-model_id: banglabert_large_lr_2e-6
+# model_id: banglabert_large_lr_2e-6
+# model_id: banglabert_large_wd0.9
+# model_id: banglabert_large_wd2_warmup0.1
+# model_id: banglabert_large_warmup0.1_lsmth0.1
+model_id: banglabert_warmup0.1_lsmth0.1
 
 results_dir: ./results/fixed/bert_token_4cls/${model_id}
 dataset:
@@ -22,7 +26,7 @@ dataset:
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-15000
 
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
-  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-8500
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-18500
   # {'eval_loss': 0.20323185622692108, 'eval_Token-Wise F1': 0.9362618195686405, 'eval_Offset-Wise F1': 0.7452573315843102, 'eval_runtime': 39.2, 'eval_samples_per_second': 47.883, 'eval_steps_per_second': 5.995, 'epoch': 2.13}
 
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
