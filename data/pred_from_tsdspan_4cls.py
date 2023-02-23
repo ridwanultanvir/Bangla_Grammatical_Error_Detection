@@ -74,8 +74,7 @@ def replace_end(x):
 
 if __name__ == "__main__":
   # Read test_tsd.csv
-  test_file = "processed_data/test_tsd.csv"
-  test_file = "../external_datasets/sazzed2019sentiment/processed/all_p8500_n3307.csv"
+  test_file = "processed_data/test_tsd.csv"  
 
   # pred_file = "pred/spans-pred_test.txt"
   # pred_file = "pred/spans_pred_bn_large.txt"
@@ -96,8 +95,23 @@ if __name__ == "__main__":
   # out_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_train_checkpoint-2000.csv"
   # pred_file = f"./three_class/bertcrf_3cls/spans-pred-train_checkpoint-500.txt"
   # pred_file = "./pred/bert_token_4cls_bertlarge/spans-pred_test_checkpoint-8500.txt"
-  pred_file = './pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500.txt'
-  pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-8000_sent11k.txt"
+  # pred_file = './pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500.txt'
+
+  # pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-8000_sent11k.txt"
+  # test_file = "../external_datasets/sazzed2019sentiment/processed/all_p8500_n3307.csv"
+  # test_file = "../external_datasets/csebuetnlp_paraphrase/processed/csebuetnlp_paraphrase_5k_v2.csv"
+  # test_file = "../external_datasets/facebook-scraper/BharotMaa_1000.csv"
+  # pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-8000_bharat1000.txt"
+  # test_file = "../external_datasets/facebook-scraper/BanglaTribuneOnline_1000.csv"
+  # pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-8000_bangtribune.txt"
+  
+  # pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-8000_bt_th0.8.txt"
+  
+  # pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500_th0.8.txt"
+  # pred_file = "./pred/banglabert_warmup0.1_lsmth0.1/spans-pred_test_checkpoint-19500.txt"
+  pred_file = './pred/ens/banglabert19500_bertlarge18500_warmup0.1_lsmth0.1_union.txt'
+
+
 
 
   pred_file_p = Path(pred_file)
@@ -147,7 +161,7 @@ if __name__ == "__main__":
   t_I = []
   t_E = []
   # for pred_3, test_tsd_3 in zip(pred.iloc[:, 2], test_tsd.iloc[:, 0]):
-  for pred_3, pred_3_I, pred_3_E, test_tsd_3 in zip(pred.iloc[:, 1], pred.iloc[:, 2], pred.iloc[:, 3],test_tsd.iloc[:, 0]):
+  for pred_3, pred_3_I, pred_3_E, test_tsd_3 in zip(pred.iloc[:, 1], pred.iloc[:, 2], pred.iloc[:, 3],test_tsd['text']):
     # Get third row of pred, test_tsd
     # index = 3
     # pred_3 = pred.iloc[3, 1]
