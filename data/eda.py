@@ -81,4 +81,14 @@ data_generation standard
 
 
 
+
+'''
+
+
+
+
+'''
+সে বললো,‘ আপনি আমার কবিতা পড়েন?'
+any quotiation sentences are ignored. 
+
 '''

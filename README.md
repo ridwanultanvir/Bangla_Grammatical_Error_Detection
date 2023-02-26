@@ -37,9 +37,18 @@ Basically, bangla spell detection+correction dataset
 * run.sh
 
 
+
 ## Literature
 
 [Judge a Sentence by Its Content to Generate Grammatical Errors](https://arxiv.org/pdf/2208.09693.pdf)
 
 [BSpell: A CNN-blended BERT Based Bengali Spell Checker](https://arxiv.org/pdf/2208.09709.pdf)
   
+##
+pandas dataframe format : 
+colm: 
+1. correct sentence: from a clean corpus, input to data generation: prothom-alo
+2. gt: annoted error sentence with $ $
+3. sentence: error sentence without dollar
+4. correct_pos, tok paris:
+
