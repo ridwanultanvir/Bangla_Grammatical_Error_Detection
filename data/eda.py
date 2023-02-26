@@ -36,8 +36,10 @@ extraction: converstion to word file, or use [OCR](https://github.com/tesseract-
 # Learn english words in bangla
 
 Can also use: https://stackabuse.com/text-translation-with-google-translate-api-in-python/ 
-
 https://pypi.org/project/google-transliteration-api/
+
+# Dataset: https://www.kaggle.com/datasets/rtatman/english-word-frequency
+# Remove stop words using NLTK, take 10,000 most frequent and transliterate
 
 আসলে এলিজাবেথ, আমার $প্রাকটিস$ শেষ করে তোমার সাথে কথা বলতে চাই।
 $কন্টাকটরের$ ডাকই বলে $দিল$ এটা তালতলা।
