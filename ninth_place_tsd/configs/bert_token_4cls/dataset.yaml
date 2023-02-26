@@ -2,28 +2,31 @@ name: toxic_spans_tokens_4cls
 # model_checkpoint_name: xlm-roberta-large
 # model_checkpoint_name: bert-base-multilingual-uncased
 # model_checkpoint_name: bigscience/bloom-560m
-# model_checkpoint_name: csebuetnlp/banglishbert
-
 # model_checkpoint_name: microsoft/deberta-v3-large
 # model_checkpoint_name: microsoft/deberta-v3-base
-# model_checkpoint_name: csebuetnlp/banglabert
-model_checkpoint_name: csebuetnlp/banglabert_large
 # model_checkpoint_name:  xlm-roberta-base
 # model_checkpoint_name: sagorsarker/bangla-bert-base
-
 # model_checkpoint_name: sberbank-ai/mGPT
+
+# model_checkpoint_name: csebuetnlp/banglishbert
+model_checkpoint_name: csebuetnlp/banglabert
+# model_checkpoint_name: csebuetnlp/banglabert_large
+
 train_files:
-  train: ./data/vasha23_4cls/train_4cls.csv # ./data/tsd_train.csv
+  # train: ./data/vasha23_4cls/train_4cls.csv
+  train: ./data/vasha23_4cls/train_4cls_norm.csv
   # train: ./data/vasha23_3cls_fullfold1/train_3cls.csv # ./data/tsd_train.csv
   # train: ./data/vasha23_3cls/train_3cls_small.csv # ./data/tsd_train.csv
   # validation: ./data/vasha23_3cls/test_3cls_small.csv # ./data/tsd_trial.csv
-  validation: ./data/vasha23_4cls/test_4cls.csv # ./data/tsd_trial.csv
+  # validation: ./data/vasha23_4cls/test_4cls.csv
+  validation: ./data/vasha23_4cls/test_4cls_norm.csv
   # validation: ./data/vasha23_3cls_fullfold1/test_3cls.csv # ./data/tsd_trial.csv
 
   # train: ./data/vasha23_fullfold1/train.csv # ./data/tsd_train.csv
   # validation: ./data/vasha23_fullfold1/valid.csv # ./data/tsd_trial.csv
 eval_files:
-  test: ./data/test_tsd.csv # ./data/tsd_test.csv
+  # test: ./data/test_tsd.csv # ./data/tsd_test.csv
+  test: ./data/test_tsd_norm.csv # ./data/tsd_test.csv
 label_cls: true
 cls_threshold: 0.3 # can be tuned
 token_threshold: 0.0 # can be tuned

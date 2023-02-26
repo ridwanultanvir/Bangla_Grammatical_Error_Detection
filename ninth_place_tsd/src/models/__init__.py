@@ -5,4 +5,6 @@ from src.models.bert_multi_spans import *
 from src.models.roberta_multi_spans import *
 from src.models.bert_crf_token import *
 from src.models.bert_crf_3cls_token import *
+from src.models.bert_crf_4cls_token import *
 from src.models.roberta_crf_token import *
+from src.models.auto_model_v2 import *

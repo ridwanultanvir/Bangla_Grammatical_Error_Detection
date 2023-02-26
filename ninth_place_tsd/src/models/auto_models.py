@@ -6,3 +6,5 @@ configmapper.map("models", "autotoken_3cls")(AutoModelForTokenClassification)
 configmapper.map("models", "autotoken_4cls")(AutoModelForTokenClassification)
 configmapper.map("models", "autospans")(AutoModelForQuestionAnswering)
 
+
+

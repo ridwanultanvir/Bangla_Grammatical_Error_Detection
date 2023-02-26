@@ -43,6 +43,10 @@ words2 = dictionary2[["word"]]
 words = pd.concat([words, words2], ignore_index=True)
 words = words.drop_duplicates()
 
+# Save the dictionary in a csv file
+words.to_csv("data/two_dictwords.csv", index=False)
+exit()
+
 word_regex = "|".join(words.values.flatten().tolist())
 print("Word regex: ", word_regex[:100])
 

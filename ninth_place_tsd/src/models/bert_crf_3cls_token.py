@@ -8,7 +8,7 @@ from src.utils.mapper import configmapper
 
 @configmapper.map("models", "bert_crf_3cls_token")
 # class BertLSTMCRF(BertForTokenClassification):
-class BertLSTMCRF(ElectraForTokenClassification):
+class BertLSTMCRF3CLS(ElectraForTokenClassification):
     def __init__(self, config, lstm_hidden_size, lstm_layers):
         print("bert_crf_3cls_token")
         super().__init__(config)

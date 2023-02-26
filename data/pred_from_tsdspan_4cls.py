@@ -109,7 +109,10 @@ if __name__ == "__main__":
   
   # pred_file = "./pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500_th0.8.txt"
   # pred_file = "./pred/banglabert_warmup0.1_lsmth0.1/spans-pred_test_checkpoint-19500.txt"
-  pred_file = './pred/ens/banglabert19500_bertlarge18500_warmup0.1_lsmth0.1_union.txt'
+  # pred_file = './pred/ens/banglabert19500_bertlarge18500_warmup0.1_lsmth0.1_union.txt'
+  # pred_file = './pred/bert_token_4cls/banglabert_large_adamwpt_warmup0.1_lsmth0.1_th0.1/spans-pred_test_checkpoint-40000.txt'
+  pred_file = './pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_fp16/spans-pred_test_checkpoint-21000.txt'
+  
 
 
 
@@ -137,7 +140,11 @@ if __name__ == "__main__":
     # pred_file = f"./three_class/bert_token_3cls_banglabert/spans-pred_train_checkpoint-2000.txt"
     # pred_file = f"./three_class/bertcrf_3cls/spans-pred-train_checkpoint-500.txt"
     # pred_file = "pred/bert_token_4cls_bertlarge/spans-pred_train_checkpoint-8000.txt"
-    pred_file = "pred/bert_token_4cls_bertlarge/spans-pred_validation_checkpoint-8000.txt"
+    # pred_file = "pred/bert_token_4cls_bertlarge/spans-pred_validation_checkpoint-8000.txt"
+    test_file = "../ninth_place_tsd/data/vasha23_4cls/test_4cls.csv"
+    pred_file = "./pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_fp16/spans-pred_validation_checkpoint-16000.txt"
+    
+    
     pred_file_p = Path(pred_file)
     out_file = pred_file_p.parent/(pred_file_p.stem + '.csv')
 
@@ -277,7 +284,10 @@ if __name__ == "__main__":
   if train_check:
     test_tsd["diff2"] = test_tsd["Expected"] != test_tsd["gt"]
     # Keep only gt, expected, diff2
-    test_tsd = test_tsd[["gt", "Expected", "diff2"]]
+    test_tsd = test_tsd[[
+      "gt", 
+      "Expected", 
+      "diff2"]]
   
 
   # test_tsd = test_tsd[["gt", "Expected"]]

@@ -41,6 +41,10 @@ if __name__ == "__main__":
   # Read data from DataSetFold1.csv\DataSetFold1.csv
   import pandas as pd
   df = pd.read_csv(r"DataSetFold1_u.csv/DataSetFold1_u.csv")
+  df2 = pd.read_csv(r"DataSetFold2.csv/DataSetFold2.csv")
+  df = df.append(df2)
+  # print(df.shape); exit()
+
   # Apply the get_spans function to the text column
   df["text"], df["spans"], df["count_ignore"] = zip(*df["gt"].apply(get_spans))
   print("Sum of ignored spans: ", df["count_ignore"].sum())
