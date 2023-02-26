@@ -1,7 +1,7 @@
 import pandas as pd
 from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
-
+import re
 class ErrorLayer:
     
     def gen_error(self,sentence_list, error_list):
@@ -87,10 +87,10 @@ class ErrorGenerator:
         error_list = []
         for layer in self.layers:
             error_list = layer.gen_error(s_list, error_list)
-        # print("s_list: ",s_list)
-        # print("error_list: ",error_list)
+        print("s_list: ",s_list)
+        print("error_list: ",error_list)
         print("--------")
-        self.get_row(s_list,error_list)
+        # self.get_row(s_list,error_list)
         
 
 if __name__ == '__main__':
@@ -103,9 +103,10 @@ if __name__ == '__main__':
     tot=  0
     
     for row in correct_sentences.iterrows():
-        lst = row[1]['correct_sentence'].split(' ')
+        sentence = row[1]['correct_sentence']
+        lst = re.split(r'\s+',sentence)
         g.gen_error(lst)
         tot+=1
-        if tot>10:
+        if tot>100:
             break
     
