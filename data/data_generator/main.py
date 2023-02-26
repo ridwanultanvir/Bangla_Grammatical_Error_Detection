@@ -1,7 +1,7 @@
 import pandas as pd
 from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
-
+from punctuation_error_layer import PunctuationErrorLayer
 import nltk
 nltk.download('punkt')
 
@@ -19,8 +19,10 @@ class ErrorLayer:
 
 class ErrorGenerator:
     def __init__(self):
-        self.layers = [SplitErrorLayer()]
-        self.layers += [MergeErrorLayer()]
+        self.layers = []
+        # self.layers += [SplitErrorLayer()]
+        # self.layers += [MergeErrorLayer()]
+        self.layers += [PunctuationErrorLayer()]
     
     def get_row(self, s_list,error_list):
         # pass
@@ -72,10 +74,10 @@ class ErrorGenerator:
         error_list = []
         for layer in self.layers:
             error_list = layer.gen_error(s_list, error_list)
-        print("s_list: ",s_list)
-        print("error_list: ",error_list)
+        # print("s_list: ",s_list)
+        # print("error_list: ",error_list)
         print("--------")
-        # self.get_row(s_list,error_list)
+        self.get_row(s_list,error_list)
         
 
 if __name__ == '__main__':
