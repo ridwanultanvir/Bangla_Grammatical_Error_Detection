@@ -19,12 +19,79 @@ class ErrorGenerator:
         self.layers = [SplitErrorLayer()]
         self.layers += [MergeErrorLayer()]
     
+    # def get_error_sentence(self,s_list,error_list,prefix,postfix):
+    #     n = len(s_list)
+    #     m = len(error_list)
+    #     i=0
+    #     j=0
+    #     error_sentence=''
+    #     while i<n:
+    #         if j<m and error_list[j][0] == i:
+    #             error_sentence += prefix + error_list[j][2]+ postfix
+    #             i+=error_list[j][1]
+    #             j+=1
+    #         else:
+    #             error_sentence += s_list[i]
+    #             i+=1
+    #         error_sentence+=' '
+    #     error_sentence+='।'
+    #     return error_sentence
+    
+    def get_row(self, s_list,error_list):
+        # pass
+        correct_sentence = ' '.join(s_list)
+        correct_sentence+='।'
+        
+        gt = ''
+        sentence = ''
+        correction = [] # list of tuple ((start_pos, end_pos), correction))
+        pos_sentence = 0
+        n=len(s_list)
+        m=len(error_list)
+        i=0
+        j=0
+        
+        while i<n:
+            if j<m and error_list[j][0] == i:
+                gt+= '$'+error_list[j][2]+'$'
+                
+                start_pos = pos_sentence
+                pos_sentence+=len(error_list[j][2])
+                sentence+=error_list[j][2]
+                end_pos = pos_sentence-1
+                
+                correct_words = ' '.join(s_list[i:i+error_list[j][1]])
+                correction.append(((start_pos,end_pos),correct_words))
+                i+=error_list[j][1]
+                j+=1
+            else:
+                gt+=s_list[i]
+                sentence+=s_list[i]
+                pos_sentence+=len(s_list[i])
+                i+=1
+            if i<n:
+                gt+=' '
+                sentence+=' '
+                pos_sentence+=1
+        
+        sentence+='।'
+        gt+='।'
+        
+        print("correct_sentence: ",correct_sentence)
+        print("sentence: ",sentence)
+        print("gt: ",gt)
+        print("correction: ",correction)
+        
+    
     def gen_error(self,s_list):
         error_list = []
         for layer in self.layers:
             error_list = layer.gen_error(s_list, error_list)
-        print("s_list: ",s_list)
-        print("error_list: ",error_list)
+        # print("s_list: ",s_list)
+        # print("error_list: ",error_list)
+        print("--------")
+        self.get_row(s_list,error_list)
+        
 
 if __name__ == '__main__':
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
@@ -39,6 +106,6 @@ if __name__ == '__main__':
         lst = row[1]['correct_sentence'].split(' ')
         g.gen_error(lst)
         tot+=1
-        if tot>100:
+        if tot>10:
             break
     
