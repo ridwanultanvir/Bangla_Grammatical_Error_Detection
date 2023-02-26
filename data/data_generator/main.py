@@ -1,6 +1,18 @@
 import pandas as pd
 
 
+class ErrorLayer:
+    
+    def gen_error(self,sentence_list, error_list):
+        """
+        sentence_list: list of words
+        error_list: list of tuple( position_in_sentence list, 
+        number of word in sentence_list, errored_words)
+        
+        returns : new error_list
+        """
+        pass
+
 def add_error(s_list):
     print("sentence_list: ", s_list)
     print("len(s_list[0]): ", len(s_list[0]))
