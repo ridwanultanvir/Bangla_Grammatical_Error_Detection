@@ -1,5 +1,5 @@
 import pandas as pd
-
+from split_error_layer import SplitErrorLayer
 
 class ErrorLayer:
     
@@ -13,22 +13,30 @@ class ErrorLayer:
         """
         pass
 
-def add_error(s_list):
-    print("sentence_list: ", s_list)
-    print("len(s_list[0]): ", len(s_list[0]))
-    for c in s_list[0]:
-        print("c: ", c)
-    pass
+class ErrorGenerator:
+    def __init__(self):
+        self.layers = [SplitErrorLayer()]
+    
+    def gen_error(self,s_list):
+        error_list = []
+        for layer in self.layers:
+            error_list = layer.gen_error(s_list, error_list)
+        print("s_list: ",s_list)
+        print("error_list: ",error_list)
 
 if __name__ == '__main__':
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
     correct_sentences = pd.read_csv(csv_file)
-    print(correct_sentences.head(10))
+    # print(correct_sentences.head(10))
+    g = ErrorGenerator()
+    # s_list = ['অংশইঅংশক']
+    # g.gen_error(s_list)
     tot=  0
+    
     for row in correct_sentences.iterrows():
         lst = row[1]['correct_sentence'].split(' ')
-        add_error(lst)
+        g.gen_error(lst)
         tot+=1
-        if tot>10:
+        if tot>100:
             break
     
