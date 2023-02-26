@@ -39,6 +39,6 @@ if __name__ == '__main__':
         lst = row[1]['correct_sentence'].split(' ')
         g.gen_error(lst)
         tot+=1
-        if tot>10:
+        if tot>100:
             break
     
