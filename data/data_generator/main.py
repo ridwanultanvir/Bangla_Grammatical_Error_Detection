@@ -1,5 +1,6 @@
 import pandas as pd
 from split_error_layer import SplitErrorLayer
+from merge_error_layer import MergeErrorLayer
 
 class ErrorLayer:
     
@@ -16,6 +17,7 @@ class ErrorLayer:
 class ErrorGenerator:
     def __init__(self):
         self.layers = [SplitErrorLayer()]
+        self.layers += [MergeErrorLayer()]
     
     def gen_error(self,s_list):
         error_list = []
@@ -29,7 +31,7 @@ if __name__ == '__main__':
     correct_sentences = pd.read_csv(csv_file)
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
-    # s_list = ['অংশইঅংশক']
+    # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']
     # g.gen_error(s_list)
     tot=  0
     
@@ -37,6 +39,6 @@ if __name__ == '__main__':
         lst = row[1]['correct_sentence'].split(' ')
         g.gen_error(lst)
         tot+=1
-        if tot>100:
+        if tot>10:
             break
     

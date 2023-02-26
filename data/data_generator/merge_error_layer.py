@@ -1,6 +1,6 @@
 import pandas as pd
 
-class SplitErrorLayer:
+class MergeErrorLayer:
     
     def __init__(self):
         
@@ -29,28 +29,20 @@ class SplitErrorLayer:
         i=0
         j=0
         ret_error_list = []
-        while i<n:
+        while i+1<n:
             if j<m and i==error_list[j][0]:
                 ret_error_list.append(error_list[j])
                 i+=error_list[j][1]
                 j+=1
             else:
-                error_words = None
-                word = sentence_list[i]
-                ln = len(word)
-                for pos in range(1,ln):
-                    to_search = [word[:pos],word[pos:]]
-                    idxs = self.dict['word'].searchsorted(to_search)
-                    if idxs[0]>=len(self.dict['word']) or idxs[1]>=len(self.dict['word']):
-                        continue
-                    if (self.dict['word'][idxs] == to_search).all():
-                        # print("to_search: ",to_search)
-                        error_words = to_search
-                        break
-                if error_words:
-                    ret_error_list.append((i,1,' '.join(error_words)))
-                
-                i+=1
+                to_search = sentence_list[i]+sentence_list[i+1]
+                idx = self.dict['word'].searchsorted(to_search)
+                if (idx< len(self.dict['word'])) and \
+                        (self.dict['word'][idx] == to_search):
+                    ret_error_list.append((i,2,to_search))
+                    i+=2
+                else:
+                    i+=1
         
         return ret_error_list
 
