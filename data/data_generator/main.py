@@ -1,7 +1,10 @@
 import pandas as pd
 from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
-import re
+
+import nltk
+nltk.download('punkt')
+
 class ErrorLayer:
     
     def gen_error(self,sentence_list, error_list):
@@ -18,24 +21,6 @@ class ErrorGenerator:
     def __init__(self):
         self.layers = [SplitErrorLayer()]
         self.layers += [MergeErrorLayer()]
-    
-    # def get_error_sentence(self,s_list,error_list,prefix,postfix):
-    #     n = len(s_list)
-    #     m = len(error_list)
-    #     i=0
-    #     j=0
-    #     error_sentence=''
-    #     while i<n:
-    #         if j<m and error_list[j][0] == i:
-    #             error_sentence += prefix + error_list[j][2]+ postfix
-    #             i+=error_list[j][1]
-    #             j+=1
-    #         else:
-    #             error_sentence += s_list[i]
-    #             i+=1
-    #         error_sentence+=' '
-    #     error_sentence+='।'
-    #     return error_sentence
     
     def get_row(self, s_list,error_list):
         # pass
@@ -104,7 +89,8 @@ if __name__ == '__main__':
     
     for row in correct_sentences.iterrows():
         sentence = row[1]['correct_sentence']
-        lst = re.split(r'\s+',sentence)
+        # split sentence into words and pancuation
+        lst = nltk.word_tokenize(sentence)
         g.gen_error(lst)
         tot+=1
         if tot>100:
