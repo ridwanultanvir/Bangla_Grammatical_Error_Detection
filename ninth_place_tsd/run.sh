@@ -43,3 +43,5 @@ CUDA_VISIBLE_DEVICES=0 python -u eval.py --eval ./configs/bert_crf_3cls_token/ev
 python ./src/utils/combine_preds.py --config ./configs/combine_predictions/union_roberta_token_best_3_ckpts.yaml
 
 python ./src/utils/combine_preds_3cls.py --config ./configs/combine_predictions/union_roberta_token_best_3_ckpts.yaml
+
+python ./src/utils/combine_preds_4cls.py --config ./configs/combine_predictions/union_roberta_token_best_3_ckpts.yaml

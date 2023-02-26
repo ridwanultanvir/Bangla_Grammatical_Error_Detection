@@ -1,5 +1,5 @@
-type: intersection
-# type: union
+# type: intersection
+type: union
 base_dir: ""
 files:
   # - "../data/pred/spans_pred_bn_large.txt"
@@ -8,8 +8,11 @@ files:
   # - "../data/pred/spans_pred_debertav3_large.txt"
   # - "../data/pred/bertcrf/spans-pred-test_checkpoint-3000.txt"
   # - "../data/pred/bertlargecrf/spans-pred-test_checkpoint-3000.txt"
-  - "../data/three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-3000.txt"
-  - "../data/three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-7000.txt"
+  # - "../data/three_class/bert_token_3cls_banglabert/spans-pred_test_checkpoint-3000.txt"
+  # - "../data/three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-7000.txt"
+  - "../data/pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500_th0.8.txt"
+  - "../data/pred/banglabert_warmup0.1_lsmth0.1/spans-pred_test_checkpoint-19500.txt"
 
 # path: "../data/pred/spans_pred_bnl_xlmb_bnb_dv3l_int.txt"
-path: "../data/three_class/bert_token_3cls_bertlarge7000_banglabert3000_int.txt"
+# path: "../data/three_class/bert_token_3cls_bertlarge7000_banglabert3000_int.txt"
+path: "../data/pred/ens/banglabert19500_bertlarge18500_warmup0.1_lsmth0.1_union.txt"

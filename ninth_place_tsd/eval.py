@@ -1404,6 +1404,7 @@ elif "token_4cls" in eval_config.model_name:
 
       preds = predictions.predictions
       preds = np.argmax(preds, axis=2)
+
       f1_scores = []
       edit_scores = []
       with open(
@@ -1562,22 +1563,45 @@ elif "token_4cls" in eval_config.model_name:
       temp_offset_mapping = tokenized_test_dataset[key]["offset_mapping"]
       predictions = trainer.predict(tokenized_test_dataset[key])
       preds = predictions.predictions
+      
+      # Find the probability of the predicted label
+      # import ipdb; ipdb.set_trace()
+      preds_s = torch.softmax(torch.from_numpy(preds), dim=2)
+      preds_proba = np.max(preds_s.numpy(), axis=2)
+
       preds = np.argmax(preds, axis=2)
       f1_scores = []
       with open(
         os.path.join(eval_config.save_dir, f"spans-pred_{key}_{suffix}.txt"), "a"
       ) as f:
-        for i, pred in tqdm(enumerate(preds)):
+        for i, (pred, pred_proba) in tqdm(enumerate(zip(preds, preds_proba))):
           # print(key,i)
           ## Batch Wise
           # print(len(prediction))
           predicted_spans = []
           predicted_spans_I = []
-          predicted_spans_E = []          
-          for j, tokenwise_prediction in enumerate(
-            pred[: len(temp_offset_mapping[i])]
+          predicted_spans_E = []
+          p_B, p_I, p_E = [], [], []    
+          for j, (tokenwise_prediction, token_p) in enumerate(
+            zip(
+            pred[: len(temp_offset_mapping[i])],
+            pred_proba[: len(temp_offset_mapping[i])]
+            )
           ):
+            thresh = 0.8
+            if token_p < thresh: 
+              continue
+
+            test = temp_offset_mapping[i][j][1] != 0
+            # Repeat token range time
+            token_p = np.repeat(token_p, temp_offset_mapping[i][j][1] - temp_offset_mapping[i][j][0])
+            token_p = token_p.tolist()
+
+
             if tokenwise_prediction == 1:
+              # import ipdb; ipdb.set_trace()
+              if test: p_B += token_p
+
               predicted_spans += list(
                 range(
                   temp_offset_mapping[i][j][0],
@@ -1585,6 +1609,7 @@ elif "token_4cls" in eval_config.model_name:
                 )
               )
             elif tokenwise_prediction == 2:
+              if test: p_I += token_p
               predicted_spans_I += list(
                 range(
                   temp_offset_mapping[i][j][0],
@@ -1592,6 +1617,7 @@ elif "token_4cls" in eval_config.model_name:
                 )
               )
             elif tokenwise_prediction == 3:
+              if test: p_E += token_p
               predicted_spans_E += list(
                 range(
                   temp_offset_mapping[i][j][0],
@@ -1604,7 +1630,10 @@ elif "token_4cls" in eval_config.model_name:
           # else:
           #     f.write(f"{i}\t{str(predicted_spans)}\n")
           if 1:
-            f.write(f"{i}\t{str(predicted_spans)}\t{str(predicted_spans_I)}\t{str(predicted_spans_E)}\n")
+            f.write(
+              f"{i}\t{str(predicted_spans)}\t{str(predicted_spans_I)}\t{str(predicted_spans_E)}"
+              f"\t{p_B}\t{p_I}\t{p_E}"
+              "\n")
 
 
 elif "token" in eval_config.model_name:
