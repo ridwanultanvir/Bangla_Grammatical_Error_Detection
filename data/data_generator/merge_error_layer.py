@@ -1,8 +1,9 @@
 import pandas as pd
-
+import numpy as np
 class MergeErrorLayer:
     
-    def __init__(self,**kwargs):
+    def __init__(self, error_prob_in_sentence=0.5):
+        self.error_prob_in_sentence = error_prob_in_sentence
         
         dict_file = './two_dictwords.csv'
         # laod dict
@@ -38,7 +39,8 @@ class MergeErrorLayer:
                 to_search = sentence_list[i]+sentence_list[i+1]
                 idx = self.dict['word'].searchsorted(to_search)
                 if (idx< len(self.dict['word'])) and \
-                        (self.dict['word'][idx] == to_search):
+                        (self.dict['word'][idx] == to_search) and \
+                            np.random.rand()<self.error_prob_in_sentence:
                     ret_error_list.append((i,2,to_search))
                     i+=2
                 else:

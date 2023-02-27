@@ -19,8 +19,8 @@ class HomonymErrorLayer():
         
         self.homoynm_dict = pd.read_csv('./homonyms.csv')
         # self.homoynm_dict = homonym_df.to_dict()
-        print("homonym dict:", self.homoynm_dict)
-        print("homonym dict head:", self.homoynm_dict.head(10))
+        # print("homonym dict:", self.homoynm_dict)
+        # print("homonym dict head:", self.homoynm_dict.head(10))
         # two columns : word,homonyms
         # homonyms is an array only take the first position of the array
         
