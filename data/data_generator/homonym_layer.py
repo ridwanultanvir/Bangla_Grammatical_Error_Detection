@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import random
 class HomoynmLayer():
     
     def __init__(self) -> None:
@@ -16,7 +17,7 @@ class HomoynmLayer():
         #                           ignore_index=True
         #                           )
         
-        self.homoynm_dict = pd.read_csv('./homonyms2.csv')
+        self.homoynm_dict = pd.read_csv('./homonyms.csv')
         # self.homoynm_dict = homonym_df.to_dict()
         print("homonym dict:", self.homoynm_dict)
         # two columns : word,homonyms
@@ -88,7 +89,9 @@ class HomoynmLayer():
                 # print("idx: ",idx," to_search: ",to_search)
                 if idx<len(self.homoynm_dict['word']) and self.homoynm_dict['word'][idx]==to_search:
                     # print("to_search: ",to_search)
-                    ret_error_list.append((i,1,self.homoynm_dict['homonyms'][idx]))
+                    homonyms_list = self.homoynm_dict.loc[idx, 'homonyms'].strip("[]").split(", ")  # Split the array and remove the brackets
+                    chosen_homonym = random.choice(homonyms_list) 
+                    ret_error_list.append((i,1,chosen_homonym))
                 # if np.random.sample()<0.2:
                 #     ret_error_list.append((i,1,self.gen_word(to_search)))
                 i+=1
