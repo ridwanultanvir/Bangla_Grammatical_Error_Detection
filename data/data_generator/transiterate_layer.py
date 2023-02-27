@@ -82,7 +82,8 @@ class TransiterateLayer():
                 # if idx<len(self.dict['bangla']) and self.dict['bangla'][idx]==to_search:
                 #     # print("to_search: ",to_search)
                 #     ret_error_list.append((i,1,self.dict['english'][idx]))
-                ret_error_list.append((i,1,self.gen_word(to_search)))
+                if np.random.sample()<0.2:
+                    ret_error_list.append((i,1,self.gen_word(to_search)))
                 i+=1
         
         return ret_error_list
