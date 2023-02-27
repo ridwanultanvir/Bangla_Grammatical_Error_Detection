@@ -91,15 +91,15 @@ if __name__ == '__main__':
     # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']
     # g.gen_error(s_list)
     tot=  0
-    data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
-    df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
-    df.to_csv(out_file, index=False)
-    # for row in correct_sentences.iterrows():
-    #     sentence = row[1]['correct_sentence']
-    #     # split sentence into words and pancuation
-    #     lst = nltk.word_tokenize(sentence)
-    #     g.gen_error(lst)
-    #     tot+=1
-    #     if tot>1000:
-    #         break
+    # data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
+    # df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
+    # df.to_csv(out_file, index=False)
+    for row in correct_sentences.iterrows():
+        sentence = row[1]['correct_sentence']
+        # split sentence into words and pancuation
+        lst = nltk.word_tokenize(sentence)
+        g.gen_error(lst)
+        tot+=1
+        if tot>10:
+            break
     
