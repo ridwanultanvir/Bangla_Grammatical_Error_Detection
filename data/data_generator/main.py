@@ -3,10 +3,10 @@ from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
 from punctuation_error_layer import PunctuationErrorLayer
 from transiterate_layer import TransiterateLayer
-from homonym_layer import HomoynmLayer
+from spelling_error_layer import SpellingErrorLayer
 import nltk
-nltk.download('punkt')
-
+nltk.download('punkt', quiet=True)
+import numpy as np
 class ErrorLayer:
     
     def gen_error(self,sentence_list, error_list):
@@ -22,11 +22,17 @@ class ErrorLayer:
 class ErrorGenerator:
     def __init__(self):
         self.layers = []
-        # self.layers += [SplitErrorLayer()]
-        # self.layers += [MergeErrorLayer()]
-        # self.layers += [PunctuationErrorLayer()]
+        # self.layers += [SplitErrorLayer(error_prob_in_sentence=0.5)]
+        # self.layers += [MergeErrorLayer(error_prob_in_sentence=0.5)]
+        # self.layers += [PunctuationErrorLayer(
+		# 	error_prob_in_sentence = 0.6,
+		# 	replace_prob=0.33,
+		# 	remove_prob=0.33,
+		# 	insert_prob=0.33
+		# )]
         # self.layers += [TransiterateLayer()]
-        self.layers += [HomoynmLayer()]
+        # self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.1)]
+    
     def get_row(self, s_list,error_list):
         # pass
         correct_sentence = ' '.join(s_list)
@@ -84,6 +90,7 @@ class ErrorGenerator:
         
 
 if __name__ == '__main__':
+    np.random.seed(0)
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
     out_file = './transiterate/output1.csv'
     correct_sentences = pd.read_csv(csv_file)

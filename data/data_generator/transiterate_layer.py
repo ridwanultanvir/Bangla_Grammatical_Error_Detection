@@ -15,45 +15,6 @@ class TransiterateLayer():
                                   inplace=True,
                                   ignore_index=True
                                   )
-        
-        self.phonetic_dict = {
-            'ঋ' : ['রি'],
-            'ঐ': ['অই'],
-            'ঔ': ['অউ'],
-            'খ': ['ক'],
-            'ঙ': ['◌ং'],
-            'ঝ': ['জ'],
-            'ঠ' : ['ট','ত'],
-            'ড' : ['দ'],
-            'ঢ': ['ড'],
-            'থ': ['ত','ট'],
-            'দ' : ['ড'],
-            'ধ' : ['দ','ড'],
-            'ভ' : ['ব'],
-            'য' : ['জ'],
-            'ৎ' : ['ত'],
-            'ং' : ['ঙ'],
-            'ঃ': ['হ'],
-            '‍ঁ' : [''],
-            'ৈ'  :['ই'],
-            'ৌ':['উ'],
-            '‍ঢ়': ['র'],
-            'ড়' : ['র'],
-            'ৃ' : ['রি'],
-            'অ' : ['ও'],
-            'ই':['ঈ'],
-            'উ' : ['ঊ'],
-            'চ': ['ছ'],
-            'ট' :['ত'],
-            'ড': ['দ'],
-            'ন': ['ণ'],
-            'য' : ['জ'],
-            'শ' : ['স','ষ'],
-            'ি' : ['◌ী'],
-            'ু' : ['◌ূ']
-        }
-        
-        pass
     
     def gen_word(self,word):
         ret=''
@@ -78,12 +39,10 @@ class TransiterateLayer():
                 j+=1
             else:
                 to_search = s_list[i]
-                # idx = self.dict['bangla'].searchsorted(to_search)
-                # if idx<len(self.dict['bangla']) and self.dict['bangla'][idx]==to_search:
-                #     # print("to_search: ",to_search)
-                #     ret_error_list.append((i,1,self.dict['english'][idx]))
-                if np.random.sample()<0.2:
-                    ret_error_list.append((i,1,self.gen_word(to_search)))
+                idx = self.dict['bangla'].searchsorted(to_search)
+                if idx<len(self.dict['bangla']) and self.dict['bangla'][idx]==to_search:
+                    # print("to_search: ",to_search)
+                    ret_error_list.append((i,1,self.dict['english'][idx]))
                 i+=1
         
         return ret_error_list
