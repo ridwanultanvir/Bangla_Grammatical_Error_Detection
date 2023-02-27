@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 class TransiterateLayer():
     
-    def __init__(self) -> None:
+    def __init__(self,**kwargs) -> None:
         frequnt_wordlist_file = './transiterate/en_bn.csv'
         self.dict = pd.read_csv(frequnt_wordlist_file)
         # print("dict head: ",self.dict.head(10))

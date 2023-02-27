@@ -7,6 +7,10 @@ from spelling_error_layer import SpellingErrorLayer
 import nltk
 nltk.download('punkt', quiet=True)
 import numpy as np
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+tqdm.pandas()
+
 class ErrorLayer:
     
     def gen_error(self,sentence_list, error_list):
@@ -20,18 +24,19 @@ class ErrorLayer:
         pass
 
 class ErrorGenerator:
-    def __init__(self):
+    def __init__(self,error_prob = 0.40):
+        self.error_prob = error_prob
         self.layers = []
-        # self.layers += [SplitErrorLayer(error_prob_in_sentence=0.5)]
-        # self.layers += [MergeErrorLayer(error_prob_in_sentence=0.5)]
-        # self.layers += [PunctuationErrorLayer(
-		# 	error_prob_in_sentence = 0.6,
-		# 	replace_prob=0.33,
-		# 	remove_prob=0.33,
-		# 	insert_prob=0.33
-		# )]
-        # self.layers += [TransiterateLayer()]
-        # self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.1)]
+        self.layers += [SplitErrorLayer(error_prob_in_sentence=0.5)]
+        self.layers += [MergeErrorLayer(error_prob_in_sentence=0.5)]
+        self.layers += [PunctuationErrorLayer(
+        	error_prob_in_sentence = 0.6,
+        	replace_prob=0.33,
+        	remove_prob=0.33,
+        	insert_prob=0.33
+        )]
+        self.layers += [TransiterateLayer(error_prob_in_sentence=0.5)]
+        self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.1)]
     
     def get_row(self, s_list,error_list):
         # pass
@@ -73,41 +78,56 @@ class ErrorGenerator:
         sentence+='।'
         gt+='।'
         
-        print("correct_sentence: ",correct_sentence)
-        print("sentence: ",sentence)
-        print("gt: ",gt)
-        print("correction: ",correction)
+        # print("correct_sentence: ",correct_sentence)
+        # print("sentence: ",sentence)
+        # print("gt: ",gt)
+        # print("correction: ",correction)
         return (correct_sentence, gt, sentence, correction)
     
     def gen_error(self,s_list):
         error_list = []
-        for layer in self.layers:
-            error_list = layer.gen_error(s_list, error_list)
+        if np.random.rand() < self.error_prob:
+            for layer in self.layers:
+                error_list = layer.gen_error(s_list, error_list)
         # print("s_list: ",s_list)
         # print("error_list: ",error_list)
-        print("--------")
+        # print("--------")
         return self.get_row(s_list,error_list)
         
 
 if __name__ == '__main__':
     np.random.seed(0)
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
-    out_file = './transiterate/output1.csv'
+    out_file = './tmp.csv'
     correct_sentences = pd.read_csv(csv_file)
-    # print(correct_sentences.head(10))
     g = ErrorGenerator()
-    # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']
-    # g.gen_error(s_list)
     tot=  0
-    data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
-    df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
+    
+    df = pd.DataFrame()
+    df["correct_sentence"],df["gt"],df["sentence"],df["correction"] = \
+                zip(*correct_sentences['correct_sentence'].progress_apply(lambda x: g.gen_error(nltk.word_tokenize(x))))
+    
+    count_correction = df['correction'].apply(lambda x: len(x))
+    print(count_correction)
+    counts = count_correction.value_counts().sort_index()
+    ax=counts.plot(kind='bar')
+    for i, v in enumerate(counts):
+        ax.text(i, v, str(v), ha='center', va='bottom')
+    plt.show()
+    print("counts: \n", counts)
+    percents = counts/len(df)
+    ax = percents.plot(kind='bar')
+    for i, v in enumerate(percents):
+        ax.text(i, v, f'{v:0.2f}', ha='center', va='bottom')
+    plt.show()
+    print("percents: \n", percents)
     df.to_csv(out_file, index=False)
-    for row in correct_sentences.iterrows():
-        sentence = row[1]['correct_sentence']
-        # split sentence into words and pancuation
-        lst = nltk.word_tokenize(sentence)
-        g.gen_error(lst)
-        tot+=1
-        if tot>10:
-            break
+    # for row in correct_sentences.iterrows():
+    #     sentence = row[1]['correct_sentence']
+    #     # split sentence into words and pancuation
+    #     lst = nltk.word_tokenize(sentence)
+    #     g.gen_error(lst)
+    #     tot+=1
+    #     if tot>10:
+    #         break
     
