@@ -24,9 +24,14 @@ class ErrorGenerator:
         self.layers = []
         # self.layers += [SplitErrorLayer()]
         # self.layers += [MergeErrorLayer()]
-        # self.layers += [PunctuationErrorLayer()]
-        self.layers += [TransiterateLayer()]
-        self.layers += [SpellingErrorLayer()]
+        self.layers += [PunctuationErrorLayer(
+			error_prob_in_sentence = 0.6,
+			replace_prob=0.33,
+			remove_prob=0.33,
+			insert_prob=0.33
+		)]
+        # self.layers += [TransiterateLayer()]
+        self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.1)]
     
     def get_row(self, s_list,error_list):
         # pass

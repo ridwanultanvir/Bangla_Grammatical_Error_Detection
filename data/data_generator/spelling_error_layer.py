@@ -1,8 +1,8 @@
 import numpy as np
 class SpellingErrorLayer():
     
-    def __init__(self,prob_in_sentence = 0.5) -> None:
-        self.prob_in_sentence = prob_in_sentence
+    def __init__(self,error_prob_in_sentence = 0.5) -> None:
+        self.error_prob_in_sentence = error_prob_in_sentence
         self.phonetic_dict = {
             'ঋ' : ['রি'],
             'ঐ': ['অই'],
@@ -73,7 +73,7 @@ class SpellingErrorLayer():
             else:
                 to_search = s_list[i]
                 err_word = self.gen_word(to_search)
-                if err_word != to_search and np.random.sample()<self.prob_in_sentence:
+                if err_word != to_search and np.random.sample()<self.error_prob_in_sentence:
                     ret_error_list.append((i,1,err_word))
                 i+=1
         
