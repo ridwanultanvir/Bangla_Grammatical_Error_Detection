@@ -2,6 +2,7 @@ import pandas as pd
 from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
 from punctuation_error_layer import PunctuationErrorLayer
+from transiterate_layer import TransiterateLayer
 import nltk
 nltk.download('punkt')
 
@@ -20,9 +21,10 @@ class ErrorLayer:
 class ErrorGenerator:
     def __init__(self):
         self.layers = []
-        self.layers += [SplitErrorLayer()]
-        self.layers += [MergeErrorLayer()]
-        self.layers += [PunctuationErrorLayer()]
+        # self.layers += [SplitErrorLayer()]
+        # self.layers += [MergeErrorLayer()]
+        # self.layers += [PunctuationErrorLayer()]
+        self.layers += [TransiterateLayer()]
     
     def get_row(self, s_list,error_list):
         # pass
@@ -64,10 +66,10 @@ class ErrorGenerator:
         sentence+='।'
         gt+='।'
         
-        # print("correct_sentence: ",correct_sentence)
-        # print("sentence: ",sentence)
-        # print("gt: ",gt)
-        # print("correction: ",correction)
+        print("correct_sentence: ",correct_sentence)
+        print("sentence: ",sentence)
+        print("gt: ",gt)
+        print("correction: ",correction)
         return (correct_sentence, gt, sentence, correction)
     
     def gen_error(self,s_list):
@@ -76,13 +78,13 @@ class ErrorGenerator:
             error_list = layer.gen_error(s_list, error_list)
         # print("s_list: ",s_list)
         # print("error_list: ",error_list)
-        # print("--------")
+        print("--------")
         return self.get_row(s_list,error_list)
         
 
 if __name__ == '__main__':
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
-    out_file = '../../../archive/data_v2/data_v2_processed_500_error.csv'
+    out_file = './transiterate/transiterate1.csv'
     correct_sentences = pd.read_csv(csv_file)
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
@@ -98,6 +100,6 @@ if __name__ == '__main__':
     #     lst = nltk.word_tokenize(sentence)
     #     g.gen_error(lst)
     #     tot+=1
-    #     if tot>100:
+    #     if tot>1000:
     #         break
     
