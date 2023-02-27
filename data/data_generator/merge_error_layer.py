@@ -2,7 +2,7 @@ import pandas as pd
 
 class MergeErrorLayer:
     
-    def __init__(self):
+    def __init__(self,**kwargs):
         
         dict_file = './two_dictwords.csv'
         # laod dict

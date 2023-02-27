@@ -22,16 +22,16 @@ class ErrorLayer:
 class ErrorGenerator:
     def __init__(self):
         self.layers = []
-        # self.layers += [SplitErrorLayer()]
-        # self.layers += [MergeErrorLayer()]
-        self.layers += [PunctuationErrorLayer(
-			error_prob_in_sentence = 0.6,
-			replace_prob=0.33,
-			remove_prob=0.33,
-			insert_prob=0.33
-		)]
+        # self.layers += [SplitErrorLayer(error_prob_in_sentence=0.5)]
+        # self.layers += [MergeErrorLayer(error_prob_in_sentence=0.5)]
+        # self.layers += [PunctuationErrorLayer(
+		# 	error_prob_in_sentence = 0.6,
+		# 	replace_prob=0.33,
+		# 	remove_prob=0.33,
+		# 	insert_prob=0.33
+		# )]
         # self.layers += [TransiterateLayer()]
-        self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.1)]
+        # self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.1)]
     
     def get_row(self, s_list,error_list):
         # pass
