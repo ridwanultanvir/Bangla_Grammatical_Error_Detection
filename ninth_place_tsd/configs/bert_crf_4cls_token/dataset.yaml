@@ -7,10 +7,14 @@ model_checkpoint_name: csebuetnlp/banglabert
 # model_checkpoint_name:  xlm-roberta-base
 
 train_files:
-  train: ./data/vasha23_4cls/train_4cls.csv # ./data/tsd_train.csv
-  validation: ./data/vasha23_4cls/test_4cls.csv # ./data/tsd_trial.csv
+  # train: ./data/vasha23_4cls/train_4cls.csv # ./data/tsd_train.csv
+  train: ./data/vasha23_4cls/train_4cls_norm.csv
+  # validation: ./data/vasha23_4cls/test_4cls.csv # ./data/tsd_trial.csv
+  validation: ./data/vasha23_4cls/test_4cls_norm.csv
+
 eval_files:
-  test: ./data/test_tsd.csv # ./data/tsd_test.csv
+  # test: ./data/test_tsd.csv # ./data/tsd_test.csv
+  test: ./data/test_tsd_norm.csv # ./data/tsd_test.csv
 label_cls: true
 cls_threshold: 0.3 # can be tuned
 token_threshold: 0.0 # can be tuned

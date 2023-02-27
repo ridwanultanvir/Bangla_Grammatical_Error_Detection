@@ -25,7 +25,8 @@ class ErrorGenerator:
         print("error_list: ",error_list)
 
 if __name__ == '__main__':
-    csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
+    # csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
+    csv_file = 'data_v2_processed_500.csv'
     correct_sentences = pd.read_csv(csv_file)
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
