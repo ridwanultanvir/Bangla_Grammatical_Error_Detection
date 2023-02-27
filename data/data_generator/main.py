@@ -3,9 +3,10 @@ from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
 from punctuation_error_layer import PunctuationErrorLayer
 from transiterate_layer import TransiterateLayer
+from spelling_error_layer import SpellingErrorLayer
 import nltk
-nltk.download('punkt')
-
+nltk.download('punkt', quiet=True)
+import numpy as np
 class ErrorLayer:
     
     def gen_error(self,sentence_list, error_list):
@@ -25,6 +26,7 @@ class ErrorGenerator:
         # self.layers += [MergeErrorLayer()]
         # self.layers += [PunctuationErrorLayer()]
         self.layers += [TransiterateLayer()]
+        self.layers += [SpellingErrorLayer()]
     
     def get_row(self, s_list,error_list):
         # pass
@@ -83,6 +85,7 @@ class ErrorGenerator:
         
 
 if __name__ == '__main__':
+    np.random.seed(0)
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
     out_file = './transiterate/transiterate1.csv'
     correct_sentences = pd.read_csv(csv_file)
