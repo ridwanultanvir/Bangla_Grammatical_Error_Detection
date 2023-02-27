@@ -20,8 +20,8 @@ class ErrorLayer:
 class ErrorGenerator:
     def __init__(self):
         self.layers = []
-        # self.layers += [SplitErrorLayer()]
-        # self.layers += [MergeErrorLayer()]
+        self.layers += [SplitErrorLayer()]
+        self.layers += [MergeErrorLayer()]
         self.layers += [PunctuationErrorLayer()]
     
     def get_row(self, s_list,error_list):
@@ -64,11 +64,11 @@ class ErrorGenerator:
         sentence+='।'
         gt+='।'
         
-        print("correct_sentence: ",correct_sentence)
-        print("sentence: ",sentence)
-        print("gt: ",gt)
-        print("correction: ",correction)
-        
+        # print("correct_sentence: ",correct_sentence)
+        # print("sentence: ",sentence)
+        # print("gt: ",gt)
+        # print("correction: ",correction)
+        return (correct_sentence, gt, sentence, correction)
     
     def gen_error(self,s_list):
         error_list = []
@@ -76,25 +76,28 @@ class ErrorGenerator:
             error_list = layer.gen_error(s_list, error_list)
         # print("s_list: ",s_list)
         # print("error_list: ",error_list)
-        print("--------")
-        self.get_row(s_list,error_list)
+        # print("--------")
+        return self.get_row(s_list,error_list)
         
 
 if __name__ == '__main__':
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
+    out_file = '../../../archive/data_v2/data_v2_processed_500_error.csv'
     correct_sentences = pd.read_csv(csv_file)
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
     # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']
     # g.gen_error(s_list)
     tot=  0
-    
-    for row in correct_sentences.iterrows():
-        sentence = row[1]['correct_sentence']
-        # split sentence into words and pancuation
-        lst = nltk.word_tokenize(sentence)
-        g.gen_error(lst)
-        tot+=1
-        if tot>100:
-            break
+    data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
+    df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
+    df.to_csv(out_file, index=False)
+    # for row in correct_sentences.iterrows():
+    #     sentence = row[1]['correct_sentence']
+    #     # split sentence into words and pancuation
+    #     lst = nltk.word_tokenize(sentence)
+    #     g.gen_error(lst)
+    #     tot+=1
+    #     if tot>100:
+    #         break
     
