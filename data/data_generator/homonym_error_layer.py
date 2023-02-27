@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 import random
-class HomoynmLayer():
+class HomonymErrorLayer():
     
-    def __init__(self) -> None:
+    def __init__(self, **kwargs) -> None:
         # frequnt_wordlist_file = './transiterate/en_bn.csv'
         # self.dict = pd.read_csv(frequnt_wordlist_file)
         # # print("dict head: ",self.dict.head(10))
@@ -20,44 +20,10 @@ class HomoynmLayer():
         self.homoynm_dict = pd.read_csv('./homonyms.csv')
         # self.homoynm_dict = homonym_df.to_dict()
         print("homonym dict:", self.homoynm_dict)
+        print("homonym dict head:", self.homoynm_dict.head(10))
         # two columns : word,homonyms
         # homonyms is an array only take the first position of the array
-        # self.phonetic_dict = {
-        #     'ঋ' : ['রি'],
-        #     'ঐ': ['অই'],
-        #     'ঔ': ['অউ'],
-        #     'খ': ['ক'],
-        #     'ঙ': ['◌ং'],
-        #     'ঝ': ['জ'],
-        #     'ঠ' : ['ট','ত'],
-        #     'ড' : ['দ'],
-        #     'ঢ': ['ড'],
-        #     'থ': ['ত','ট'],
-        #     'দ' : ['ড'],
-        #     'ধ' : ['দ','ড'],
-        #     'ভ' : ['ব'],
-        #     'য' : ['জ'],
-        #     'ৎ' : ['ত'],
-        #     'ং' : ['ঙ'],
-        #     'ঃ': ['হ'],
-        #     '‍ঁ' : [''],
-        #     'ৈ'  :['ই'],
-        #     'ৌ':['উ'],
-        #     '‍ঢ়': ['র'],
-        #     'ড়' : ['র'],
-        #     'ৃ' : ['রি'],
-        #     'অ' : ['ও'],
-        #     'ই':['ঈ'],
-        #     'উ' : ['ঊ'],
-        #     'চ': ['ছ'],
-        #     'ট' :['ত'],
-        #     'ড': ['দ'],
-        #     'ন': ['ণ'],
-        #     'য' : ['জ'],
-        #     'শ' : ['স','ষ'],
-        #     'ি' : ['◌ী'],
-        #     'ু' : ['◌ূ']
-        # }
+        
         
         pass
     
