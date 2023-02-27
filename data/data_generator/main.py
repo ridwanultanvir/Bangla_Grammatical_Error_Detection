@@ -3,6 +3,7 @@ from split_error_layer import SplitErrorLayer
 from merge_error_layer import MergeErrorLayer
 from punctuation_error_layer import PunctuationErrorLayer
 from transiterate_layer import TransiterateLayer
+from homonym_layer import HomoynmLayer
 import nltk
 nltk.download('punkt')
 
@@ -24,8 +25,8 @@ class ErrorGenerator:
         # self.layers += [SplitErrorLayer()]
         # self.layers += [MergeErrorLayer()]
         # self.layers += [PunctuationErrorLayer()]
-        self.layers += [TransiterateLayer()]
-    
+        # self.layers += [TransiterateLayer()]
+        self.layers += [HomoynmLayer()]
     def get_row(self, s_list,error_list):
         # pass
         correct_sentence = ' '.join(s_list)
@@ -84,16 +85,16 @@ class ErrorGenerator:
 
 if __name__ == '__main__':
     csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
-    out_file = './transiterate/transiterate1.csv'
+    out_file = './transiterate/output1.csv'
     correct_sentences = pd.read_csv(csv_file)
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
     # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']
     # g.gen_error(s_list)
     tot=  0
-    # data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
-    # df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
-    # df.to_csv(out_file, index=False)
+    data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
+    df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
+    df.to_csv(out_file, index=False)
     for row in correct_sentences.iterrows():
         sentence = row[1]['correct_sentence']
         # split sentence into words and pancuation
