@@ -43,17 +43,6 @@ Basically, bangla spell detection+correction dataset
 [Judge a Sentence by Its Content to Generate Grammatical Errors](https://arxiv.org/pdf/2208.09693.pdf)
 
 [BSpell: A CNN-blended BERT Based Bengali Spell Checker](https://arxiv.org/pdf/2208.09709.pdf)
-<<<<<<< HEAD
-  
-##
-pandas dataframe format : 
-colm: 
-1. correct sentence: from a clean corpus, input to data generation: prothom-alo
-2. gt: annoted error sentence with $ $
-3. sentence: error sentence without dollar
-4. correct_pos, tok paris:
-
-=======
 
 ### Grammarly
 [Under the Hood at Grammarly: Leveraging Transformer Language Models for Grammatical Error Correction](https://www.grammarly.com/blog/engineering/under-the-hood-at-grammarly-leveraging-transformer-language-models-for-grammatical-error-correction/)
@@ -62,4 +51,3 @@ Grammatical Error Correction](https://arxiv.org/pdf/1906.01733.pdf)
 [Adversarial Grammatical Error Correction](https://arxiv.org/pdf/2010.02407.pdf)
 [MuCGEC: a Multi-Reference Multi-Source Evaluation Dataset for
 Chinese Grammatical Error Correction](https://arxiv.org/pdf/2204.10994.pdf)
->>>>>>> 3da697b01d81e27fe7c6a4f41dd38a908020e4d1

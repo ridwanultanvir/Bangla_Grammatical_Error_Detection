@@ -35,20 +35,20 @@ class SplitErrorLayer:
                 i+=error_list[j][1]
                 j+=1
             else:
-                k=-1
+                error_words = None
                 word = sentence_list[i]
                 ln = len(word)
-                for pos in range(0,ln-1):
-                    to_search = [word[:pos],word[pos+1:]]
+                for pos in range(1,ln):
+                    to_search = [word[:pos],word[pos:]]
                     idxs = self.dict['word'].searchsorted(to_search)
                     if idxs[0]>=len(self.dict['word']) or idxs[1]>=len(self.dict['word']):
                         continue
                     if (self.dict['word'][idxs] == to_search).all():
-                        
-                        k=pos
+                        # print("to_search: ",to_search)
+                        error_words = to_search
                         break
-                if k!=-1:
-                    ret_error_list.append((i,1,sentence_list[i][:k]+" "+sentence_list[i][k+1:]))
+                if error_words:
+                    ret_error_list.append((i,1,' '.join(error_words)))
                 
                 i+=1
         
