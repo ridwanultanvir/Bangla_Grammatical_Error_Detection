@@ -86,7 +86,7 @@ class ErrorGenerator:
 
 if __name__ == '__main__':
     csv_file = 'trans11.csv'
-    out_file = 'trans21_error.csv'
+    out_file = 'trans22_error.csv'
     correct_sentences = pd.read_csv(csv_file)
     print("shape:", correct_sentences.shape)
 
