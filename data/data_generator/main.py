@@ -5,6 +5,7 @@ from punctuation_error_layer import PunctuationErrorLayer
 from transiterate_layer import TransiterateLayer
 from spelling_error_layer import SpellingErrorLayer
 from homonym_error_layer import HomonymErrorLayer
+from named_entity_detection_layer import NamedEntityDetectionLayer
 import nltk
 nltk.download('punkt', quiet=True)
 import numpy as np
@@ -32,14 +33,16 @@ class ErrorGenerator:
         self.layers += [SplitErrorLayer(error_prob_in_sentence=0.3)]
         self.layers += [MergeErrorLayer(error_prob_in_sentence=0.5)]
         self.layers += [PunctuationErrorLayer(
-        	error_prob_in_sentence = 0.1,
-        	replace_prob=0.33,
-        	remove_prob=0.33,
-        	insert_prob=0.33
+            error_prob_in_sentence = 0.1,
+            replace_prob=0.33,
+            remove_prob=0.33,
+            insert_prob=0.33
         )]
-        self.layers += [TransiterateLayer(error_prob_in_sentence=0.5)]
+        # self.layers += [TransiterateLayer(error_prob_in_sentence=0.5)]
         self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.3)]
         self.layers += [HomonymErrorLayer(error_prob_in_sentence=1.0)]
+        
+        self.named_entity_detection_layer = NamedEntityDetectionLayer()
     
     def get_row(self, s_list,error_list):
         # pass
@@ -87,18 +90,39 @@ class ErrorGenerator:
         # print("correction: ",correction)
         return (correct_sentence, gt, sentence, correction)
     
-    def gen_error(self,s_list):
+    def get_error_only(self,error_list,named_entity_list):
+        ret_list = []
+        # n=len(error_list)
+        # m=len(named_entity_list)
+        # i=0
+        # j=0
+        # while i<n:
+        #     if j<m and named_entity_list[j][0]==error_list[i][0]:
+        #         j+=1
+        #         i+=1
+        #     else:
+        #         ret_list.append(error_list[i])
+        #         i+=1
+        return [x for x in error_list if x not in named_entity_list]
+        return ret_list
+    def gen_error(self,sentence):
         error_list = []
+        s_list,error_list = self.named_entity_detection_layer.get_tag(sentence)
+        named_entity_list = error_list
+        
         # sample from poissson distribution with mean 1
-        n = np.random.poisson(0.5)
+        n=100
+        n = np.random.poisson(0.6)
         # if np.random.rand() < self.error_prob:
         if n>0:
             for layer in self.layers:
                 error_list = layer.gen_error(s_list, error_list)
+            error_list = self.get_error_only(error_list,named_entity_list)
             np.random.shuffle(error_list)
             error_list = error_list[:n]
             error_list = sorted(error_list, key=lambda x: x[0])
-        
+        else:
+            error_list = []
         
         # print("s_list: ",s_list)
         # print("error_list: ",error_list)
@@ -115,9 +139,7 @@ if __name__ == '__main__':
     # tot=  0
     # for row in correct_sentences.iterrows():
     #     sentence = row[1]['correct_sentence']
-    #     # split sentence into words and pancuation
-    #     lst = nltk.word_tokenize(sentence)
-    #     g.gen_error(lst)
+    #     g.gen_error(sentence)
     #     tot+=1
     #     if tot>100:
     #         break
@@ -125,7 +147,7 @@ if __name__ == '__main__':
     
     df = pd.DataFrame()
     df["correct_sentence"],df["gt"],df["sentence"],df["correction"] = \
-                zip(*correct_sentences['correct_sentence'].progress_apply(lambda x: g.gen_error(nltk.word_tokenize(x))))
+                zip(*correct_sentences['correct_sentence'].progress_apply(lambda x: g.gen_error(x)))
     
     count_correction = df['correction'].apply(lambda x: len(x))
     print(count_correction)

@@ -42,6 +42,13 @@ class SpellingErrorLayer():
         
         pass
     
+    def pure_char(self,s):
+        ret=''
+        for c in s:
+            if ord(c) == 9676:
+                continue
+            ret+=c
+        return ret
     def gen_word(self,word):
         ret=''
         assert len(word)>0
@@ -52,7 +59,7 @@ class SpellingErrorLayer():
                 if total_error == 0:
                     ret+=c
                 else:
-                    ret+=np.random.choice(self.phonetic_dict[c])
+                    ret+=self.pure_char(np.random.choice(self.phonetic_dict[c]))
                     total_error-=1
             else:
                 ret+=c
