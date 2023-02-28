@@ -85,9 +85,11 @@ class ErrorGenerator:
         
 
 if __name__ == '__main__':
-    csv_file = 'trans1.csv'
-    out_file = 'trans2_error.csv'
+    csv_file = 'trans11.csv'
+    out_file = 'trans21_error.csv'
     correct_sentences = pd.read_csv(csv_file)
+    print("shape:", correct_sentences.shape)
+
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
     # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']

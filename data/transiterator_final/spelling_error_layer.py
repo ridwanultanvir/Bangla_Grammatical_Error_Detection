@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 class SpellingErrorLayer():
     
-    def __init__(self,error_prob_in_sentence = 0.5) -> None:
+    def __init__(self,error_prob_in_sentence = 0.0) -> None:
         frequnt_wordlist_file = './en_bn.csv'
         self.dict = pd.read_csv(frequnt_wordlist_file)
         # print("dict head: ",self.dict.head(10))
