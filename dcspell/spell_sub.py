@@ -25,7 +25,8 @@ bad_words = pd.read_csv("data/bad_words_notd_wiki_man.csv")
 # trainfile = r"../data/pred/bert_token_4cls_bertlarge/spans-pred_test_checkpoint-8500.csv"
 # trainfile = r"../data/pred/ens/banglabert19500_bertlarge18500_warmup0.1_lsmth0.1_int.csv"
 # trainfile = r"../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-19000.csv"
-trainfile = "../data/pred/ens/bertnormsmth0.1_9500_largenormsmth0.2_12000_int.csv"
+# trainfile = "../data/pred/ens/bertnormsmth0.1_9500_largenormsmth0.2_12000_int.csv"
+trainfile = '../data/Aug1/pred/spans-pred_test_checkpoint-12000.csv'
 
 from pathlib import Path
 pred_file_p = Path(trainfile)
