@@ -1,9 +1,9 @@
 import pandas as pd
-
+import numpy as np
 class SplitErrorLayer:
     
-    def __init__(self):
-        
+    def __init__(self,error_prob_in_sentence=0.5):
+        self.error_prob_in_sentence = error_prob_in_sentence
         dict_file = './two_dictwords.csv'
         # laod dict
         self.dict = pd.read_csv(dict_file)
@@ -47,7 +47,7 @@ class SplitErrorLayer:
                         # print("to_search: ",to_search)
                         error_words = to_search
                         break
-                if error_words:
+                if error_words and np.random.rand()<self.error_prob_in_sentence:
                     ret_error_list.append((i,1,' '.join(error_words)))
                 
                 i+=1
