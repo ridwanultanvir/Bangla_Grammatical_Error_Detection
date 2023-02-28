@@ -1,8 +1,21 @@
+import pandas as pd
 import numpy as np
-class SpellingErrorLayer():
+class TransiterateLayer():
     
-    def __init__(self,error_prob_in_sentence = 0.5) -> None:
-        self.error_prob_in_sentence = error_prob_in_sentence
+    def __init__(self) -> None:
+        frequnt_wordlist_file = './transiterate/en_bn.csv'
+        self.dict = pd.read_csv(frequnt_wordlist_file)
+        # print("dict head: ",self.dict.head(10))
+        self.dict.sort_values(by='bangla',
+                              axis=0,
+                              inplace=True,
+                              ignore_index=True
+                            )
+        self.dict.drop_duplicates(subset='bangla',
+                                  inplace=True,
+                                  ignore_index=True
+                                  )
+        
         self.phonetic_dict = {
             'ঋ' : ['রি'],
             'ঐ': ['অই'],
@@ -42,25 +55,11 @@ class SpellingErrorLayer():
         
         pass
     
-    def pure_char(self,s):
-        ret=''
-        for c in s:
-            if ord(c) == 9676:
-                continue
-            ret+=c
-        return ret
     def gen_word(self,word):
         ret=''
-        assert len(word)>0
-        # print("len(word) = ",len(word))
-        total_error = np.random.randint(1,(len(word)+1)//2+1)
         for c in word:
             if c in self.phonetic_dict:
-                if total_error == 0:
-                    ret+=c
-                else:
-                    ret+=self.pure_char(np.random.choice(self.phonetic_dict[c]))
-                    total_error-=1
+                ret+=self.phonetic_dict[c][np.random.randint(len(self.phonetic_dict[c]))]
             else:
                 ret+=c
         return ret
@@ -79,9 +78,22 @@ class SpellingErrorLayer():
                 j+=1
             else:
                 to_search = s_list[i]
-                err_word = self.gen_word(to_search)
-                if err_word != to_search and np.random.sample()<self.error_prob_in_sentence:
-                    ret_error_list.append((i,1,err_word))
+                # idx = self.dict['bangla'].searchsorted(to_search)
+                # if idx<len(self.dict['bangla']) and self.dict['bangla'][idx]==to_search:
+                #     # print("to_search: ",to_search)
+                #     ret_error_list.append((i,1,self.dict['english'][idx]))
+                
+                # check if  to_search is in frequnt_wordlist_file 'bangla' column
+                # open csv file 
+                file1 = open('tmp2.csv', 'w', encoding='utf-8')
+                if to_search in self.dict['bangla'].values:
+                    # utf-8 format 
+                    # print("to_search: ", to_search, 'utf-8 format', file=file1)
+                    # write 'to_search' in csv file
+                    print("to_search: ", to_search, file=file1)
+                    
+                    if np.random.sample()<0.2:
+                        ret_error_list.append((i,1,self.gen_word(to_search)))
                 i+=1
         
         return ret_error_list
