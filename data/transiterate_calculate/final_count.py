@@ -7,7 +7,7 @@ def transiterate_cnt():
     # Read the CSV files into dataframes
     # df1 = pd.read_csv('data_v2_processed_500.csv')
     
-    csv_file = '../../../archive/data_v2/data_v2_processed.csv'
+    csv_file = '../../../archive/data_v2/data_v2_processed_20000.csv'
     df1 = pd.read_csv(csv_file)
     df2 = pd.read_csv('en_bn.csv')
 
