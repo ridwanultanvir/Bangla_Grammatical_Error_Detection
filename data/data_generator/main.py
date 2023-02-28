@@ -104,12 +104,14 @@ class ErrorGenerator:
                 ret_list.append(error_list[i])
                 i+=1
         return ret_list
-    def gen_error(self,s_list):
+    def gen_error(self,sentence):
         error_list = []
-        error_list = self.named_entity_detection_layer.gen_error(s_list,error_list)
+        s_list,error_list = self.named_entity_detection_layer.get_tag(sentence)
         named_entity_list = error_list
+        
         # sample from poissson distribution with mean 1
-        n = np.random.poisson(0.5)
+        # n = np.random.poisson(0.5)
+        n=100
         # if np.random.rand() < self.error_prob:
         if n>0:
             for layer in self.layers:
@@ -118,7 +120,8 @@ class ErrorGenerator:
             np.random.shuffle(error_list)
             error_list = error_list[:n]
             error_list = sorted(error_list, key=lambda x: x[0])
-        
+        else:
+            error_list = []
         
         # print("s_list: ",s_list)
         # print("error_list: ",error_list)
@@ -128,16 +131,14 @@ class ErrorGenerator:
 
 if __name__ == '__main__':
     np.random.seed(0)
-    csv_file = '../../../archive/data_v2/data_v2_processed_20000.csv'
-    out_file = './data_v2_processed_20000_with_error.csv'
+    csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
+    out_file = './data_v2_processed_500_with_error.csv'
     correct_sentences = pd.read_csv(csv_file)
     g = ErrorGenerator()
     # tot=  0
     # for row in correct_sentences.iterrows():
     #     sentence = row[1]['correct_sentence']
-    #     # split sentence into words and pancuation
-    #     lst = nltk.word_tokenize(sentence)
-    #     g.gen_error(lst)
+    #     g.gen_error(sentence)
     #     tot+=1
     #     if tot>100:
     #         break
@@ -145,7 +146,7 @@ if __name__ == '__main__':
     
     df = pd.DataFrame()
     df["correct_sentence"],df["gt"],df["sentence"],df["correction"] = \
-                zip(*correct_sentences['correct_sentence'].progress_apply(lambda x: g.gen_error(nltk.word_tokenize(x))))
+                zip(*correct_sentences['correct_sentence'].progress_apply(lambda x: g.gen_error(x)))
     
     count_correction = df['correction'].apply(lambda x: len(x))
     print(count_correction)
