@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-class SpellingErrorLayer():
+class NewSpellingErrorLayer():
     
     def __init__(self,error_prob_in_sentence = 0.5) -> None:
         frequnt_wordlist_file = './en_bn.csv'
