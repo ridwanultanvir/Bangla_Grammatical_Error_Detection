@@ -80,13 +80,13 @@ class ErrorGenerator:
             error_list = layer.gen_error(s_list, error_list)
         # print("s_list: ",s_list)
         # print("error_list: ",error_list)
-        print("--------")
+        # print("--------")
         return self.get_row(s_list,error_list)
         
 
 if __name__ == '__main__':
-    csv_file = 'test1.csv'
-    out_file = 'tes7_error.csv'
+    csv_file = 'trans1.csv'
+    out_file = 'trans2_error.csv'
     correct_sentences = pd.read_csv(csv_file)
     # print(correct_sentences.head(10))
     g = ErrorGenerator()
