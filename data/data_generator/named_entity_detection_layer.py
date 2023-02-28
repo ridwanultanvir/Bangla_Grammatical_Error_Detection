@@ -1,14 +1,13 @@
-from bnlp import NER
-
+from ner import NER
 class NamedEntityDetectionLayer:
     def __init__(self) -> None:
-        self.model_path = "bn_ner.pkl"
-        self.bn_ner = NER()
+        self.model_path = "./../../dcspell/model/bn_ner.pkl"
+        self.bn_ner = NER(model_path=self.model_path)
         pass	
     
     def get_tag(self,sentence):
         ret_list = []
-        res = self.bn_ner.tag(self.model_path, sentence)
+        res = self.bn_ner.tag (sentence)
         
         s_list = [x[0] for x in res]
         # print("res: ",res)

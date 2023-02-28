@@ -38,7 +38,7 @@ class ErrorGenerator:
             remove_prob=0.33,
             insert_prob=0.33
         )]
-        self.layers += [TransiterateLayer(error_prob_in_sentence=0.5)]
+        # self.layers += [TransiterateLayer(error_prob_in_sentence=0.5)]
         self.layers += [SpellingErrorLayer(error_prob_in_sentence=0.3)]
         self.layers += [HomonymErrorLayer(error_prob_in_sentence=1.0)]
         
@@ -92,17 +92,18 @@ class ErrorGenerator:
     
     def get_error_only(self,error_list,named_entity_list):
         ret_list = []
-        n=len(error_list)
-        m=len(named_entity_list)
-        i=0
-        j=0
-        while i<n:
-            if j<m and named_entity_list[j][0]==error_list[i][0]:
-                j+=1
-                i+=1
-            else:
-                ret_list.append(error_list[i])
-                i+=1
+        # n=len(error_list)
+        # m=len(named_entity_list)
+        # i=0
+        # j=0
+        # while i<n:
+        #     if j<m and named_entity_list[j][0]==error_list[i][0]:
+        #         j+=1
+        #         i+=1
+        #     else:
+        #         ret_list.append(error_list[i])
+        #         i+=1
+        return [x for x in error_list if x not in named_entity_list]
         return ret_list
     def gen_error(self,sentence):
         error_list = []
@@ -110,8 +111,8 @@ class ErrorGenerator:
         named_entity_list = error_list
         
         # sample from poissson distribution with mean 1
-        # n = np.random.poisson(0.5)
         n=100
+        n = np.random.poisson(0.6)
         # if np.random.rand() < self.error_prob:
         if n>0:
             for layer in self.layers:
@@ -131,8 +132,8 @@ class ErrorGenerator:
 
 if __name__ == '__main__':
     np.random.seed(0)
-    csv_file = '../../../archive/data_v2/data_v2_processed_500.csv'
-    out_file = './data_v2_processed_500_with_error.csv'
+    csv_file = '../../../archive/data_v2/data_v2_processed_20000.csv'
+    out_file = './data_v2_processed_20000_with_error.csv'
     correct_sentences = pd.read_csv(csv_file)
     g = ErrorGenerator()
     # tot=  0
