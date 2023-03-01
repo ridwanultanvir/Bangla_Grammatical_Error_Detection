@@ -15,17 +15,19 @@ CUDA_VISIBLE_DEVICES=0 python -u train.py \
 
 CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token_3cls/eval.yaml
 
+# bert_token for 4 classes v2
+CUDA_VISIBLE_DEVICES=0 python -u train.py \
+  --train ./configs/bert_token_4cls_v2/train.yaml --data ./configs/bert_token_4cls_v2/dataset.yaml
+
+CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token_4cls_v2/eval.yaml
+
 # bert_token for 4 classes
 CUDA_VISIBLE_DEVICES=0 python -u train.py \
   --train ./configs/bert_token_4cls/train.yaml --data ./configs/bert_token_4cls/dataset.yaml
 
 CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token_4cls/eval.yaml
 
-# bert_token for 4 classes v2
-CUDA_VISIBLE_DEVICES=0 python -u train.py \
-  --train ./configs/bert_token_4cls_v2/train.yaml --data ./configs/bert_token_4cls_v2/dataset.yaml
 
-CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token_4cls_v2/eval.yaml
 
 # bert_crf_4cls_token
 CUDA_VISIBLE_DEVICES=0 python -u train.py \

@@ -1,0 +1,38 @@
+model_name: autospans
+# model_id: xlm_roberta_large
+# model_id: bert-base-multilingual-uncased
+# model_id: bloom-560m
+# model_id: banglishbert
+# model_id: mGPT
+
+# model_id: banglabert_10ep
+# model_id: debertav3large
+# model_id: deberta-v3-base
+# model_id: bert_large_25ep
+# model_id: banglabert_large
+model_id: banglabert
+
+# model_id: banglabert_large_full_fold1
+results_dir: ./results/fixed/bert_spans/${model_id}
+dataset:
+  name: toxic_spans_spans
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-2500
+  train_files:
+    train: ./data/vasha23/train.csv #./data/tsd_train.csv
+    validation: ./data/vasha23/valid.csv # ./data/tsd_trial.csv
+    # original_test: ./data/tsd_test_spans.csv
+  eval_files:
+    test: ./data/vasha23/test_tsd.csv # ./data/tsd_test.csv
+  tokenizer_params:
+    truncation: "only_second"
+    max_length: 384
+    stride: 128
+    return_overflowing_tokens: true
+    return_offsets_mapping: true
+    padding: max_length
+pretrained_args:
+  pretrained_model_name_or_path: ${dataset.model_checkpoint_name}
+with_ground: true
+# with_ground: False
+topk: 25
+save_dir: ${results_dir}/preds/

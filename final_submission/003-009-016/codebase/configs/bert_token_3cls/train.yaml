@@ -1,0 +1,56 @@
+model_name: autotoken
+pretrained_args:
+  # pretrained_model_name_or_path: xlm-roberta-large
+  # pretrained_model_name_or_path: bert-base-multilingual-uncased
+  # pretrained_model_name_or_path: bigscience/bloom-560m
+  # pretrained_model_name_or_path: csebuetnlp/banglishbert
+
+  # pretrained_model_name_or_path: csebuetnlp/banglabert_large
+  pretrained_model_name_or_path: csebuetnlp/banglabert
+  # pretrained_model_name_or_path:  xlm-roberta-base
+  # pretrained_model_name_or_path: microsoft/deberta-v3-large
+  # pretrained_model_name_or_path: microsoft/deberta-v3-base
+  # pretrained_model_name_or_path: csebuetnlp/banglabert
+  # pretrained_model_name_or_path: sagorsarker/bangla-bert-base
+
+  # pretrained_model_name_or_path: sberbank-ai/mGPT
+  num_labels: 3
+
+# model_id: banglabert
+# model_id: banglabert_large_adamwpt_warmup0.1_lsmth0.1_th0.1
+model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_fp16
+# model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1
+# model_id: bert_large_25ep
+# model_id: xlm_roberta_large
+# model_id: bert-base-multilingual-uncased
+# model_id: bloom-560m
+# model_id: banglishbert
+# model_id: mGPT
+
+# freeze_backbone: True
+
+results_dir: ./results/fixed/bert_token_3cls/${model_id}
+# eval_log_save: 10
+eval_log_save: 500
+
+args:
+  output_dir: ${results_dir}/ckpts/
+  evaluation_strategy: steps
+  optim: adamw_torch
+  eval_steps: ${eval_log_save}
+  logging_steps: ${eval_log_save}
+  logging_first_step: true
+  logging_dir: ${results_dir}/logs/
+  learning_rate: 2e-5
+  save_steps: 500
+  per_device_train_batch_size: 8 # 4 # originally used 2
+  per_device_eval_batch_size: 8 # 4 # originally used 2
+  # num_train_epochs: 10
+  num_train_epochs: 30
+  weight_decay: 0.01
+  label_smoothing_factor: 0.1
+  fp16: True
+  warmup_ratio: 0.1
+  seed: 42
+
+save_model_path: ${results_dir}/final_model/

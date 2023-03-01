@@ -1,0 +1,53 @@
+model_name: autotoken_3cls
+
+# model_id: xlm_roberta_large
+# model_id: bert-base-multilingual-uncased
+# model_id: bloom-560m
+# model_id: banglishbert
+# model_id: mGPT
+# model_id: banglabert_10ep
+# model_id: debertav3large
+# model_id: deberta-v3-base
+# model_id: bert_large_25ep
+# model_id: banglabert_large_full_fold1
+model_id: banglabert
+# model_id: banglabert_large
+
+with_ground: false # true
+# with_ground: true
+
+args:
+  fp16: True
+  per_device_train_batch_size: 32 # 4 # originally used 2
+  per_device_eval_batch_size: 32 # 4 # originally used 2
+
+# results_dir: ./results/fixed/bert_token_3cls/${model_id}
+results_dir: ./results/fixed/bert_token_3cls_fullfold1/${model_id}
+dataset:
+  batch_size: 32
+  name: toxic_spans_tokens_3cls
+  # model_checkpoint_name: ${results_dir}/final_model
+  # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-15000
+
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-9000
+  # {'eval_loss': 0.20323185622692108, 'eval_Token-Wise F1': 0.9362618195686405, 'eval_Offset-Wise F1': 0.7452573315843102, 'eval_runtime': 39.2, 'eval_samples_per_second': 47.883, 'eval_steps_per_second': 5.995, 'epoch': 2.13}
+
+  # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
+  train_files:
+    train: ./data/vasha23_3cls/train_3cls.csv #./data/tsd_train.csv
+    validation: ./data/vasha23_3cls/test_3cls.csv # ./data/tsd_trial.csv
+    # original_test: ./data/tsd_test_spans.csv
+  eval_files:
+    test: ./data/vasha23/test_tsd.csv # ./data/tsd_test.csv
+  label_cls: true
+  cls_threshold: 0.3 # can be tuned
+  token_threshold: 0.0 # can be tuned
+  tokenizer_params:
+    truncation: true
+    max_length: 384 # originally we used 200
+    padding: max_length
+    return_offsets_mapping: true
+pretrained_args:
+  pretrained_model_name_or_path: ${dataset.model_checkpoint_name}
+
+save_dir: ${results_dir}/preds/
