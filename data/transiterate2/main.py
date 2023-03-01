@@ -92,7 +92,7 @@ if __name__ == '__main__':
     g = ErrorGenerator()
     # s_list = ['ট্রাম্প', 'তাঁর', 'রাজনীতির', 'জন্য', 'প্রধানত', 'ব্যবহার', 'করেন', 'উগ্র', 'জাতীয়তাবাদী', 'সুড়সুড়ি']
     # g.gen_error(s_list)
-    tot=  0
+    tot=  0 
     data = [g.gen_error(nltk.word_tokenize(row[1]['correct_sentence'])) for row in correct_sentences.iterrows()]
     df = pd.DataFrame(data, columns=['correct_sentence', 'gt', 'sentence', 'correction'])
     df.to_csv(out_file, index=False)
