@@ -12,12 +12,14 @@ files:
   # - "../data/three_class/bert_token_3cls_bertlarge/spans-pred_test_checkpoint-7000.txt"
   # - "../data/pred/banglabert_large_warmup0.1_lsmth0.1_4cls/spans-pred_test_checkpoint-18500_th0.8.txt"
   # - "../data/pred/banglabert_warmup0.1_lsmth0.1/spans-pred_test_checkpoint-19500.txt"
-  - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-9500.txt"
-  - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-12000.txt"
+  # - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-9500.txt"
+  # - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-12000.txt"
+  - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold/spans-pred_test_final_model.txt"
+  - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold/spans-pred_test_final_model.txt"
 
 
 
 # path: "../data/pred/spans_pred_bnl_xlmb_bnb_dv3l_int.txt"
 # path: "../data/three_class/bert_token_3cls_bertlarge7000_banglabert3000_int.txt"
 # path: "../data/pred/ens/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm9500-19000.txt"
-path: "../data/pred/ens/bertnormsmth0.1_9500_largenormsmth0.2_12000_int.txt"
+path: "../data/pred/ens/bertnormsmth0.1_72500_largenormsmth0.2_72500_fullfold_int.txt"
