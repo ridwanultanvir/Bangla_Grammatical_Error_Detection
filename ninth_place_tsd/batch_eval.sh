@@ -1,7 +1,9 @@
 #! /bin/bash
 
-# start=500
-start=19000
+start=500
+start=5000
+# start=24000
+# start=15500
 endin=60000
 # GPU=0
 GPU=1

@@ -24,11 +24,15 @@ model_name: autotoken_4cls
 # model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm
 # model_id: banglabertlarge_adamwpt_warmup0.1_lsmth0.2_th0.1_norm
 # model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm
+# model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm_aug
+
 # model_id: banglabert_adamwpt_warmup0.1_lsmth0.2_th0.1_norm
 # model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_aug
-model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold
-# model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold
-# model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold
+# model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold
+model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold
+
+# model_id: banglabert_adamwpt_warmup0.1_norm_aug_dice
+# model_id: banglabert_adamwpt_warmup0.1_norm_aug_focal
 
 with_ground: false
 # with_ground: true
@@ -44,7 +48,9 @@ results_dir: ./results/fixed/bert_token_4cls/${model_id}
 dataset:
   batch_size: 32
   name: toxic_spans_tokens_4cls
-  model_checkpoint_name: ${results_dir}/final_model
+  # model_checkpoint_name: ${results_dir}/final_model
+  model_checkpoint_name: ${results_dir}/ckpts/checkpoint-71500
+
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-15000
 
   # model_checkpoint_name: ${results_dir}/ckpts/checkpoint-3500
@@ -55,8 +61,8 @@ dataset:
   train_files:
     # train: ./data/vasha23_4cls/train_4cls.csv #./data/tsd_train.csv
     # # validation: ./data/vasha23_4cls/test_4cls.csv # ./data/tsd_trial.csv
-    train: ./data/vasha23_4cls/train_4cls_norm.csv #./data/tsd_train.csv
-    # train: ./data/vasha23_4cls/train_4cls_norm_aug.csv #./data/tsd_train.csv
+    # train: ./data/vasha23_4cls/train_4cls_norm.csv #./data/tsd_train.csv
+    train: ./data/vasha23_4cls/train_4cls_norm_aug.csv #./data/tsd_train.csv
     validation: ./data/vasha23_4cls/test_4cls_norm.csv # ./data/tsd_trial.csv
 
 
@@ -82,6 +88,7 @@ dataset:
 pretrained_args:
   pretrained_model_name_or_path: ${dataset.model_checkpoint_name}
 
-save_dir: ${results_dir}/preds/
+# save_dir: ${results_dir}/preds/
+save_dir: ${results_dir}/preds_fin/
 # save_dir: ${results_dir}/preds_aug/
 # save_dir: ${results_dir}/preds_aug2/

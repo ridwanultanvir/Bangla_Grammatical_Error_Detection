@@ -15,16 +15,16 @@ model_checkpoint_name: csebuetnlp/banglabert
 train_files:
   # train: ./data/vasha23_4cls/train_4cls.csv
   # train: ./data/vasha23_4cls/train_4cls_norm.csv
-  # train: ./data/vasha23_4cls/train_4cls_norm_aug.csv #./data/tsd_train.csv
-  train: ./data/vasha23_4cls/train_4cls_norm_fullfold.csv
+  train: ./data/vasha23_4cls/train_4cls_norm_aug.csv #./data/tsd_train.csv
+  # train: ./data/vasha23_4cls/train_4cls_norm_fullfold.csv
 
 
   # train: ./data/vasha23_3cls_fullfold1/train_3cls.csv # ./data/tsd_train.csv
   # train: ./data/vasha23_3cls/train_3cls_small.csv # ./data/tsd_train.csv
   # validation: ./data/vasha23_3cls/test_3cls_small.csv # ./data/tsd_trial.csv
   # validation: ./data/vasha23_4cls/test_4cls.csv
-  # validation: ./data/vasha23_4cls/test_4cls_norm.csv
-  validation: ./data/vasha23_4cls/test_4cls_norm_fullfold.csv
+  validation: ./data/vasha23_4cls/test_4cls_norm.csv
+  # validation: ./data/vasha23_4cls/test_4cls_norm_fullfold.csv
 
   # validation: ./data/vasha23_3cls_fullfold1/test_3cls.csv # ./data/tsd_trial.csv
 

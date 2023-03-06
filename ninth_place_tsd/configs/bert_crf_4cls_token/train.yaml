@@ -13,14 +13,15 @@ pretrained_args:
 # model_id: banglabert_large
 # model_id: banglabert_large_norm
 # model_id: banglabert_large_lr1e-5_wd_0.05
-model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm
+# model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm
+model_id: banglabert_adamwpt_th0.8_norm
 
 results_dir: ./results/fixed/${model_name}/${model_id}
 
 args:
   optim: adamw_torch
-  warmup_ratio: 0.1
-  label_smoothing_factor: 0.1
+  # warmup_ratio: 0.1
+  # label_smoothing_factor: 0.1
   # fp16: True
 
   output_dir: ${results_dir}/ckpts/

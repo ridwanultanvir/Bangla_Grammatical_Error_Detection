@@ -558,11 +558,11 @@ if "crf_4cls" in eval_config.model_name:
   if eval_config.with_ground:
     # for key in tokenized_train_dataset.keys():
     for key in ["validation"]:
-      with open(
-        # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
-        os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
-      ) as f:
-        f.write(f"Model Name: {suffix}, Dataset: {key}\n")
+      # with open(
+      #   # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
+      #   os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
+      # ) as f:
+      #   f.write(f"Model Name: {suffix}, Dataset: {key}\n")
 
       temp_dataset = tokenized_train_dataset[key]
       temp_dataset.set_format(
@@ -588,137 +588,148 @@ if "crf_4cls" in eval_config.model_name:
         logits_all += logits.detach()
       
       offset_mapping = temp_dataset["offset_mapping"]
-      predicted_spans = []
-      predicted_spans_I = []
-      predicted_spans_E = []
+      
       # import pdb; pdb.set_trace()
       preds_s = torch.softmax(torch.stack(logits_all), axis=2)
 
-      for i, (preds, probas) in enumerate(zip(predictions, preds_s)):
-        predicted_spans.append([])
-        predicted_spans_I.append([])
-        predicted_spans_E.append([])
-        k = 0
-        for j, offsets in enumerate(offset_mapping[i]):
-          if prediction_mask[i][j] == 0:
-            break
-          else:
-            if k >= len(preds):
+      # for thresh in [0.0] + list(np.linspace(0.25, 0.95, 30)): # Best is 0.75
+      for threshold in [0.0] + list(np.linspace(0.5, 0.95, 20)): # Best is 0.75
+      # for thresh in [0.7]: # Best is 0.75, 0.7
+      # for thresh in [0.8]: 
+        predicted_spans = []
+        predicted_spans_I = []
+        predicted_spans_E = []
+        with open(
+          # os.path.join(eval_config.save_dir, f"eval_scores_{key}_{suffix}.txt"), "w"
+          os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
+        ) as f:
+          f.write(f"Model Name: {suffix}, Dataset: {key}, Threshold: {threshold}\n")
+        
+        for i, (preds, probas) in enumerate(zip(predictions, preds_s)):
+          predicted_spans.append([])
+          predicted_spans_I.append([])
+          predicted_spans_E.append([])
+          k = 0
+          for j, offsets in enumerate(offset_mapping[i]):
+            if prediction_mask[i][j] == 0:
               break
-            
-            # import pdb; pdb.set_trace()
-            threshold = 0.8
-            if probas[k][preds[k]] < threshold:
-              continue
-
-            if preds[k] == 1:
-              predicted_spans[-1] += list(range(offsets[0], offsets[1]))
-            elif preds[k] == 2:
-              predicted_spans_I[-1] += list(range(offsets[0], offsets[1]))
-            elif preds[k] == 3:
-              predicted_spans_E[-1] += list(range(offsets[0], offsets[1]))
-            
-            k += 1
-
-      spans = [eval(temp_dataset[i]["spans"]) for i in range(len(temp_dataset))]
-
-      avg_f1_score = np.mean(
-        [f1(preds, ground) for preds, ground in zip(predicted_spans, spans)]
-      )
-      edit_scores = []
-
-      with open(
-        os.path.join(eval_config.save_dir, f"spans-pred-{key}_{suffix}.txt"), "w"
-      ) as f:
-        for i, (pred, pred_I, pred_E) in tqdm(
-          enumerate(zip(predicted_spans, predicted_spans_I, predicted_spans_E)), total=len(predicted_spans)):
-          # if i == len(preds) - 1:
-          #   f.write(f"{i}\t{str(pred)}")
-          # else:
-          if 1:
-            f.write(f"{i}\t{str(pred)}\t{str(pred_I)}\t{str(pred_E)}\n")
-
-           # Edit distance
-          ranges = get_ranges(pred)
-          ranges_I = get_ranges(pred_I)
-          ranges_E = get_ranges(pred_E)
-          # print("ranges: ", ranges)
-          # Get substring from span range
-          range_merged = []
-          for i, rng_I in enumerate(ranges_I):
-            if rng_I is None:
-              continue
-            for j, rng_B in enumerate(ranges):
-              if rng_B is None:
+            else:
+              if k >= len(preds):
+                break
+              
+              # import pdb; pdb.set_trace()
+              # threshold = 0.8            
+              if probas[k][preds[k]] < threshold:
                 continue
 
-              # print(rng_B, rng_I)
-              if (rng_I.start == (rng_B.stop + 2)) and (rng_B.stop + 1 not in predicted_spans): 
-                # handle one space between them
-                new_rng = range(rng_B.start, rng_I.stop)
-                # print(new_rng)
-                range_merged.append(new_rng)
-                ranges_I[i] = None
-                ranges[j] = None
-                # exit()
-                break
-          
-          # Filter all Nones from ranges and ranges_I
-          ranges = [rng for rng in ranges if rng is not None]
-          ranges_I = [rng for rng in ranges_I if rng is not None]
+              if preds[k] == 1:
+                predicted_spans[-1] += list(range(offsets[0], offsets[1]))
+              elif preds[k] == 2:
+                predicted_spans_I[-1] += list(range(offsets[0], offsets[1]))
+              elif preds[k] == 3:
+                predicted_spans_E[-1] += list(range(offsets[0], offsets[1]))
+              
+              k += 1
 
-          ranges = ranges + ranges_I + range_merged + ranges_E
-          # print("ranges: ", ranges)
-          # Sort ranges by start
-          ranges.sort(key=lambda x: x.start)
-            
-          sentence = untokenized_train_dataset[key]["sentence"][i]
-          gt       = untokenized_train_dataset[key]["gt"][i]
-          output = ""
-          prev_s = 0
-          for i, span in enumerate(ranges):
-            # if type(span) == int:
-            #   s = span
-            #   e = span + 1
+        spans = [eval(temp_dataset[i]["spans"]) for i in range(len(temp_dataset))]
+
+        avg_f1_score = np.mean(
+          [f1(preds, ground) for preds, ground in zip(predicted_spans, spans)]
+        )
+        edit_scores = []
+
+        with open(
+          os.path.join(eval_config.save_dir, f"spans-pred-{key}_{suffix}.txt"), "w"
+        ) as f:
+          for i, (pred, pred_I, pred_E) in tqdm(
+            enumerate(zip(predicted_spans, predicted_spans_I, predicted_spans_E)), total=len(predicted_spans)):
+            # if i == len(preds) - 1:
+            #   f.write(f"{i}\t{str(pred)}")
             # else:
             if 1:
-              s = span.start
-              e = span.stop + 1
+              f.write(f"{i}\t{str(pred)}\t{str(pred_I)}\t{str(pred_E)}\n")
+
+            # Edit distance
+            ranges = get_ranges(pred)
+            ranges_I = get_ranges(pred_I)
+            ranges_E = get_ranges(pred_E)
+            # print("ranges: ", ranges)
+            # Get substring from span range
+            range_merged = []
+            for i, rng_I in enumerate(ranges_I):
+              if rng_I is None:
+                continue
+              for j, rng_B in enumerate(ranges):
+                if rng_B is None:
+                  continue
+
+                # print(rng_B, rng_I)
+                if (rng_I.start == (rng_B.stop + 2)) and (rng_B.stop + 1 not in predicted_spans): 
+                  # handle one space between them
+                  new_rng = range(rng_B.start, rng_I.stop)
+                  # print(new_rng)
+                  range_merged.append(new_rng)
+                  ranges_I[i] = None
+                  ranges[j] = None
+                  # exit()
+                  break
             
-            if s >= len(sentence):
-              break
+            # Filter all Nones from ranges and ranges_I
+            ranges = [rng for rng in ranges if rng is not None]
+            ranges_I = [rng for rng in ranges_I if rng is not None]
 
-            if s in predicted_spans_E:
-              output += sentence[prev_s:e] + "$$"
-            else:
-              output += sentence[prev_s:s] + "$" + sentence[s:e] + "$"
-            prev_s = e
+            ranges = ranges + ranges_I + range_merged + ranges_E
+            # print("ranges: ", ranges)
+            # Sort ranges by start
+            ranges.sort(key=lambda x: x.start)
+              
+            sentence = untokenized_train_dataset[key]["sentence"][i]
+            gt       = untokenized_train_dataset[key]["gt"][i]
+            output = ""
+            prev_s = 0
+            for i, span in enumerate(ranges):
+              # if type(span) == int:
+              #   s = span
+              #   e = span + 1
+              # else:
+              if 1:
+                s = span.start
+                e = span.stop + 1
+              
+              if s >= len(sentence):
+                break
+
+              if s in predicted_spans_E:
+                output += sentence[prev_s:e] + "$$"
+              else:
+                output += sentence[prev_s:s] + "$" + sentence[s:e] + "$"
+              prev_s = e
+              
+            if prev_s < len(sentence):
+              output += sentence[prev_s:]
             
-          if prev_s < len(sentence):
-            output += sentence[prev_s:]
-          
-          output = replace_fixed(output)
-          output = replace_end(output)
-          
-          # print("output: ", output)
-          # gt = untokenized_train_dataset[key]["gt"][i]
-          # save output and gt to file
-          # with open(os.path.join(eval_config.save_dir, f"output_{key}_{suffix}.txt"), "a+") as outfile:
-          #     outfile.write(gt + "\n")
-          #     # outfile.write(sentence + "\n")
-          #     outfile.write(output + "\n")
-          #     outfile.write("\n")
+            output = replace_fixed(output)
+            output = replace_end(output)
+            
+            # print("output: ", output)
+            # gt = untokenized_train_dataset[key]["gt"][i]
+            # save output and gt to file
+            # with open(os.path.join(eval_config.save_dir, f"output_{key}_{suffix}.txt"), "a+") as outfile:
+            #     outfile.write(gt + "\n")
+            #     # outfile.write(sentence + "\n")
+            #     outfile.write(output + "\n")
+            #     outfile.write("\n")
 
-          edit = edit_distance(output, gt)
-          edit_scores.append(edit)
+            edit = edit_distance(output, gt)
+            edit_scores.append(edit)
 
-      with open(
-        os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
-      ) as f:
-        f.write(str(avg_f1_score))
-        f.write(" ")
-        f.write(str(np.mean(edit_scores)))
-        f.write("\n")
+        with open(
+          os.path.join(eval_config.save_dir, f"eval_scores_{key}.txt"), "a"
+        ) as f:
+          f.write(str(avg_f1_score))
+          f.write(" ")
+          f.write(str(np.mean(edit_scores)))
+          f.write("\n")
   else:
     for key in tokenized_test_dataset.keys():
       temp_dataset = tokenized_test_dataset[key]
@@ -2318,8 +2329,10 @@ elif "token_4cls" in eval_config.model_name:
       preds_proba = np.max(preds_s.numpy(), axis=2)
 
       preds = np.argmax(preds, axis=2)
-      # for thresh in np.linspace(0.7, 0.95, 10): # Best is 0.75
-      for thresh in [0.8]: 
+      # for thresh in [0.0] + list(np.linspace(0.25, 0.95, 30)): # Best is 0.75
+      # for thresh in [0.0] + list(np.linspace(0.5, 0.95, 20)): # Best is 0.75
+      for thresh in [0.7]: # Best is 0.75, 0.7
+      # for thresh in [0]: 
         f1_scores = []
         edit_scores = []
         with open(

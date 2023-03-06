@@ -20,7 +20,7 @@ pretrained_args:
 # model_id: banglabert_large_adamwpt_warmup0.1_lsmth0.1_th0.1_fp16
 # model_id: banglabert_large_adamwpt_warmup0.1_lsmth0.1_th0.1
 
-model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold
+# model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold
 
 # model_id: banglabertlarge_adamwpt_warmup0.1_lsmth0.1_th0.1_norm
 # model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm
@@ -28,7 +28,9 @@ model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold
 
 # model_id: banglabert_adamwpt_warmup0.1_lsmth0.2_th0.1_norm
 # model_id: banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_aug
+# model_id: banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm_aug
 
+model_id: banglabert_adamwpt_warmup0.1_norm_aug_focal
 
 # model_id: banglabert
 # model_id: banglabert_large
@@ -60,7 +62,7 @@ args:
   # learning_rate: 2e-6
   optim: adamw_torch
   warmup_ratio: 0.1
-  label_smoothing_factor: 0.1
+  # label_smoothing_factor: 0.1
   # label_smoothing_factor: 0.2
   # fp16: True
   

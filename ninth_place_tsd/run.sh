@@ -28,7 +28,6 @@ CUDA_VISIBLE_DEVICES=0 python -u train.py \
 CUDA_VISIBLE_DEVICES=0 python eval.py --eval ./configs/bert_token_4cls/eval.yaml
 
 
-
 # bert_crf_4cls_token
 CUDA_VISIBLE_DEVICES=0 python -u train.py \
   --train ./configs/bert_crf_4cls_token/train.yaml --data ./configs/bert_crf_4cls_token/dataset.yaml

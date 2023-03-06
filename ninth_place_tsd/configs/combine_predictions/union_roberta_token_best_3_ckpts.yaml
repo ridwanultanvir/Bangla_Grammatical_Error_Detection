@@ -1,4 +1,4 @@
-type: intersection
+type: union
 # type: union
 base_dir: ""
 files:
@@ -14,12 +14,28 @@ files:
   # - "../data/pred/banglabert_warmup0.1_lsmth0.1/spans-pred_test_checkpoint-19500.txt"
   # - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-9500.txt"
   # - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm/spans-pred_test_checkpoint-12000.txt"
-  - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold/spans-pred_test_final_model.txt"
-  - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold/spans-pred_test_final_model.txt"
+
+  # - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold/spans-pred_test_final_model.txt"
+  # - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold/spans-pred_test_final_model.txt"
+
+  # - "../data/pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm_aug/spans-pred_test_checkpoint-15500.txt"
+  # - "../data/pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_aug/spans-pred_test_checkpoint-24000.txt"
+
+  - "../data/pred/bertlarge0.7/spans-pred_test_final_model.txt"
+  - "../data/pred/bertlarge0.7/spans-pred_test_checkpoint-72000.txt"
+  - "../data/pred/bertlarge0.7/spans-pred_test_checkpoint-71500.txt"
+
+  - "../data/pred/bert0.7/spans-pred_test_checkpoint-48000.txt"
+  - "../data/pred/bert0.7/spans-pred_test_checkpoint-48500.txt"
+  - "../data/pred/bert0.7/spans-pred_test_checkpoint-47500.txt"
+  # - "../data/pred/bert0.7/spans-pred_test_final_model.txt"
+
 
 
 
 # path: "../data/pred/spans_pred_bnl_xlmb_bnb_dv3l_int.txt"
 # path: "../data/three_class/bert_token_3cls_bertlarge7000_banglabert3000_int.txt"
 # path: "../data/pred/ens/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm9500-19000.txt"
-path: "../data/pred/ens/bertnormsmth0.1_72500_largenormsmth0.2_72500_fullfold_int.txt"
+# path: "../data/pred/ens/bertnormsmth0.1_72500_largenormsmth0.2_72500_fullfold_int.txt"
+path: "../data/pred/bertnormsmth0.1_480485475_largenormsmth0.2_725720715_th0.8_fullfold_un.txt"
+# path: "../data/pred/bertnormsmth0.7_24000_largenormsmth0.7_15500_norm_aug_int.txt"

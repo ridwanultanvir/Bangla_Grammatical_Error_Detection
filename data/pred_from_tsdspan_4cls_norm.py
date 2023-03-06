@@ -161,7 +161,14 @@ if __name__ == "__main__":
   # pred_file = './Aug2/pred/spans-pred_test_checkpoint-12000.txt'
   # pred_file = './pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_fullfold/spans-pred_test_final_model.txt'
   # pred_file = './pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_fullfold/spans-pred_test_checkpoint-12000.txt'
-  pred_file = './pred/ens/bertnormsmth0.1_72500_largenormsmth0.2_72500_fullfold_int.txt'
+  # pred_file = './pred/ens/bertnormsmth0.1_72500_largenormsmth0.2_72500_fullfold_int.txt'
+  # pred_file = './pred/bert_token_4cls/banglabert_adamwpt_warmup0.1_lsmth0.1_th0.1_norm_aug/spans-pred_test_checkpoint-24000.txt'
+  # pred_file = './pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm_aug/spans-pred_test_checkpoint-15500.txt'
+  # pred_file = './pred/ens/bertnormsmth0.7_24000_largenormsmth0.7_15500_norm_aug_int.txt'
+  # pred_file = './pred/bert_token_4cls/banglabertlarge_adamwpt_warmup0.2_lsmth0.1_th0.1_norm_aug/spans-pred_test_checkpoint-28500.txt'
+  # pred_file = "./pred/bertnormsmth0.1_48000_largenormsmth0.2_72500_th0.7_fullfold_int.txt"
+  # pred_file = "./pred/bertnormsmth0.1_480485475_largenormsmth0.2_725720715_th0.8_fullfold_int.txt"
+  pred_file = "./pred/bertnormsmth0.1_480485475_largenormsmth0.2_725720715_th0.8_fullfold_un.txt"
 
   pred_file_p = Path(pred_file)
   out_file = pred_file_p.parent/(pred_file_p.stem + '.csv')
