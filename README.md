@@ -1,4 +1,7 @@
-# Bangla-Erroneous-Text-Detection
+# Bangla_Grammatical_Error_Detection
+
+[Return_Zero_Bangla_GED_IEEE_Conf_Paper.pdf](https://github.com/ridwanultanvir/Bangla_Grammatical_Error_Detection/blob/main/Return_Zero__Bangla_GED__IEEE_Conf_%20Paper.pdf)
+
 
 ## Project Directory Structure:
 ### BanglaNLG: BUET CSE NLP Generative model
