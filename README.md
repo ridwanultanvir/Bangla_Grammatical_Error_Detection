@@ -39,7 +39,9 @@ Basically, bangla spell detection+correction dataset
 ### punctuation-restoration
 * run.sh
 
+## Kaggle:
 
+Winners: https://www.kaggle.com/competitions/bengali-ged/discussion/395940
 
 ## Literature
 
