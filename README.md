@@ -47,13 +47,6 @@ Basically, bangla spell detection+correction dataset
 
 [BSpell: A CNN-blended BERT Based Bengali Spell Checker](https://arxiv.org/pdf/2208.09709.pdf)
 
-### Grammarly
-[Under the Hood at Grammarly: Leveraging Transformer Language Models for Grammatical Error Correction](https://www.grammarly.com/blog/engineering/under-the-hood-at-grammarly-leveraging-transformer-language-models-for-grammatical-error-correction/)
+## Prize: 
+![Bangla GED Champion](images/Bangla_GED_Champion.JPG)
 
-[The Unreasonable Effectiveness of Transformer Language Models in
-Grammatical Error Correction](https://arxiv.org/pdf/1906.01733.pdf)
-
-[Adversarial Grammatical Error Correction](https://arxiv.org/pdf/2010.02407.pdf)
-
-[MuCGEC: a Multi-Reference Multi-Source Evaluation Dataset for
-Chinese Grammatical Error Correction](https://arxiv.org/pdf/2204.10994.pdf)
